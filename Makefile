@@ -1,6 +1,6 @@
 .PHONY: help test server
 
-default: test
+default: help
 
 help:
 	@echo "help - Show this help"
