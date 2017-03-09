@@ -1,6 +1,13 @@
-all: test
+.PHONY: help test server
 
-server:
+default: test
+
+help:
+	@echo "help - Show this help"
+	@echo "run - Start development server"
+	@echo "test - Run tests"
+
+run:
 	python manage.py runserver
 
 test:
