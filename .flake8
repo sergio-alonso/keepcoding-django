@@ -5,3 +5,4 @@ exclude =
   # There's no value in checking cache directories
   __pycache__,
 max-complexity = 10
+max-line-length = 119
