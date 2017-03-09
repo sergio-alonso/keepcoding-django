@@ -1,18 +1,34 @@
 """Check that we have Django installed."""
 
+
+import unittest
+
 from selenium import webdriver
 
 
-browser = webdriver.Firefox()
+class AnonymousUserTest(unittest.TestCase):
+    """Anonymous User Test."""
 
-# Alice has heard about a cool new online app.
-# She goes to check out its homepage.
-browser.get('http://localhost:8000')
+    def setUp(self):
+        """Test case setUp."""
+        self.browser = webdriver.Firefox()
 
-# She notices the page title and header mention resource lists
-assert 'Recursos' in browser.title
+    def tearDown(self):
+        """Test case tearDown."""
+        self.browser.quit()
 
-# And the page lists last post published by another users
+    def test_can_browse_last_created_posts(self):
+        """Test Case: list last post on home page."""
+        # Alice has heard about a cool new online app.
+        # She goes to check out its homepage.
+        self.browser.get('http://localhost:8000')
 
-# Satisfied, she goes back to sleep
-browser.quit()
+        # She notices the page title and header mention resource lists
+        self.assertIn('Recursos', self.browser.title)
+
+        # And the page lists last post published by another users
+        self.fail('Finish the test!')
+
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
