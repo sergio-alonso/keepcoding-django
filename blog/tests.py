@@ -1,10 +1,17 @@
 """Django blog app tests."""
+from django.core.urlresolvers import resolve
 from django.test import TestCase
 
+from blog.views import home_page
 
-class SmokeTest(TestCase):
-    """A deliberately silly failing tests."""
 
-    def test_bad_maths(self):
-        """Fail."""
-        self.assertEqual(1 + 1, 3)
+class HomePageTest(TestCase):
+    """Home page test cases."""
+
+    def test_root_url_resolves_to_home_page_view(self):
+        """Test case: root url resolves to home page view.
+
+        Check that resolve, when called with the root of the site finds a function called home_page.
+        """
+        found = resolve('/')
+        self.assertEqual(found.func, home_page)
