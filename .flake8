@@ -4,5 +4,7 @@ exclude =
   .git,
   # There's no value in checking cache directories
   __pycache__,
+  # Let migrations as generated
+  *migrations*,
 max-complexity = 10
 max-line-length = 119
