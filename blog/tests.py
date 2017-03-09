@@ -1,4 +1,10 @@
 """Django blog app tests."""
-# from django.test import TestCase
+from django.test import TestCase
 
-# Create your tests here.
+
+class SmokeTest(TestCase):
+    """A deliberately silly failing tests."""
+
+    def test_bad_maths(self):
+        """Fail."""
+        self.assertEqual(1 + 1, 3)
