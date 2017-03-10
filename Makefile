@@ -1,18 +1,21 @@
-.PHONY: help test server unit
+.PHONY: help test server unit functional
 
 default: help
 
 help:
 	@echo "help - Show this help"
 	@echo "run - Start development server"
-	@echo "test - Run functional tests"
-	@ech0 "unit - Run unit tests"
+	@echo "test - Run all tests"
+	@echo "unit - Run unit tests"
+	@echo "functional - Run functional tests"
 
 run:
 	python manage.py runserver
 
-test:
-	python functional_test.py
+test: unit functional
 
 unit:
 	python manage.py test
+
+functional:
+	python functional_test.py
