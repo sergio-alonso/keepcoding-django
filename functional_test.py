@@ -32,7 +32,7 @@ class AnonymousUserTest(unittest.TestCase):
         table = self.browser.find_element_by_id('main')
         rows = table.find_elements_by_tag_name('article')
         self.assertTrue(
-            any(row.header == 'Articulo 1' for row in rows)
+            any(row.text == 'Articulo 1' for row in rows)
         )
 
         self.fail('Finish the test!')
