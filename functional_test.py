@@ -25,8 +25,16 @@ class AnonymousUserTest(unittest.TestCase):
 
         # She notices the page title and header mention resource lists
         self.assertIn('Recursos', self.browser.title)
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('Recursos', header_text)
 
         # And the page lists last post published by another users
+        table = self.browser.find_element_by_id('main')
+        rows = table.find_elements_by_tag_name('article')
+        self.assertTrue(
+            any(row.header == 'Articulo 1' for row in rows)
+        )
+
         self.fail('Finish the test!')
 
 

@@ -1,7 +1,7 @@
 """Django blog app views."""
-# from django.shortcuts import render
+from django.shortcuts import render
 
 
-def home_page():
+def home_page(request):
     """Home page view."""
-    pass
+    return render(request, 'home.html')
