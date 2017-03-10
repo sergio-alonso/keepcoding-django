@@ -18,4 +18,4 @@ unit:
 	python manage.py test
 
 functional:
-	python functional_test.py
+	python ft_anonymous.py
