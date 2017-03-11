@@ -24,7 +24,7 @@ class UserTest(unittest.TestCase):
         # She notices the page title and header mention resource lists
         self.assertIn('Nueva entrada en el blog', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Rueva entrada en el blog', header_text)
+        self.assertIn('Nueva entrada en el blog', header_text)
 
         # She is invited to enter a post title straight away
 

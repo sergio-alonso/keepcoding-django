@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>Nueva entrada en el blog</title>
+  </head>
+  <body>
+    <h1>Nueva entrada en el blog</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+      <input name="post-title" class="post-title" placeholder="Enter a post title" />
+    </form>
+
+  </body>
+</html>

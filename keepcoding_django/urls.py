@@ -18,5 +18,6 @@ from django.conf.urls import url
 from blog import views
 
 urlpatterns = [
+    url(r'^new-post/$', views.new_post_page, name='new-post'),
     url(r'^$', views.home_page, name='home'),
 ]
