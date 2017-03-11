@@ -10,12 +10,19 @@ help:
 	@echo "functional - Run functional tests"
 
 run:
-	python manage.py runserver
+	screen -S server python manage.py runserver
+    # C-a a d
+    # screen -rd server
 
 test: unit functional
 
 unit:
 	python manage.py test
 
-functional:
+functional: ft_anonymous ft_user
+
+ft_anonymous:
 	python ft_anonymous.py
+
+ft_user:
+	python ft_user.py
