@@ -1,12 +1,10 @@
 """Check that we have Django installed."""
 
-
-import unittest
-
+from django.test import LiveServerTestCase
 from selenium import webdriver
 
 
-class AnonymousUserTest(unittest.TestCase):
+class AnonymousUserTest(LiveServerTestCase):
     """Anonymous User Test."""
 
     def setUp(self):
@@ -21,7 +19,7 @@ class AnonymousUserTest(unittest.TestCase):
         """Test Case: list last post on home page."""
         # Alice has heard about a cool new online app.
         # She goes to check out its homepage.
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # She notices the page title and header mention resource lists
         self.assertIn('Recursos', self.browser.title)
@@ -36,7 +34,3 @@ class AnonymousUserTest(unittest.TestCase):
         )
 
         self.fail('Finish the test!')
-
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')

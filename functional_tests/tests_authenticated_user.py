@@ -1,11 +1,13 @@
 """Functional tests for authenticated users."""
-import unittest
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+import time
+
+import django.test.LiveServerTestCase as LiveServerTestCase
+import selenium.webdriver as webdriver
+import selenium.webdriver.common.keys.Keys as Keys
 
 
-class UserTest(unittest.TestCase):
+class UserTest(LiveServerTestCase):
     """Authenticated User Tests."""
 
     def setUp(self):
@@ -25,7 +27,7 @@ class UserTest(unittest.TestCase):
     def test_can_create_a_new_post(self):
         """Test Case: create a new post."""
         # Alice wants to create a new post.
-        self.browser.get('http://localhost:8000/new-post')
+        self.browser.get(self.live_server_url + '/new-post')
 
         # She notices the page title and header mention resource lists
         self.assertIn('Nueva entrada en el blog', self.browser.title)
@@ -41,12 +43,10 @@ class UserTest(unittest.TestCase):
         # When she hits enter, the page updates, and now the page lists
         # "My new blog posts" as a post in a blog list
         inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
         self.check_for_row_in_list_table('My new blog post')
 
         # Then she sees that the site has generated a unique URL for her
 
         self.fail('Finish the test!')
-
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')

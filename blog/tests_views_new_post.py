@@ -53,7 +53,7 @@ class NewPostPageTest(TestCase):
         Post.objects.create(title='blog post 0')
         Post.objects.create(title='blog post 1')
 
-        response = self.client.get('/home/')
+        response = self.client.get('/new-post/')
 
         self.assertIn('blog post 0', response.content.decode())
         self.assertIn('blog post 1', response.content.decode())

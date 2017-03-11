@@ -6,8 +6,8 @@ help:
 	@echo "help - Show this help"
 	@echo "run - Start development server"
 	@echo "test - Run all tests"
-	@echo "unit - Run unit tests"
-	@echo "functional - Run functional tests"
+	@echo "ut - Run unit tests"
+	@echo "ft - Run functional tests"
 	@echo "bd - Handle databse"
 	@echo "db_clean - Recreate a fresh database"
 
@@ -16,18 +16,13 @@ run:
     # C-a a d
     # screen -rd server
 
-test: unit functional
+test: ut ft
 
-unit:
-	python manage.py test
+ut:
+	python manage.py test blog
 
-functional: ft_anonymous ft_user
-
-ft_anonymous:
-	python ft_anonymous.py
-
-ft_user:
-	python ft_user.py
+ft:
+	python manage.py test functional_tests
 
 db:
 	python manage.py makemigrations
