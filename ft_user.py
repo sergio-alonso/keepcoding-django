@@ -1,8 +1,8 @@
 """Functional tests for authenticated users."""
-
 import unittest
 
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 
 class UserTest(unittest.TestCase):
@@ -27,11 +27,14 @@ class UserTest(unittest.TestCase):
         self.assertIn('Nueva entrada en el blog', header_text)
 
         # She is invited to enter a post title straight away
+        inputbox = self.browser.find_element_by_class_name('post-title')
 
         # She types "My new blog post" into a text box
+        inputbox.send_keys('My new blog post')
 
         # When she hits enter, the page updates, and now the page lists
         # "My new blog posts" as a post in a blog list
+        inputbox.send_keys(Keys.ENTER)
 
         # Then she sees that the site has generated a unique URL for her
 
