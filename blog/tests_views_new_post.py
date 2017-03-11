@@ -30,11 +30,15 @@ class NewPostPageTest(TestCase):
 
         A function that saves a post request.
         """
-        response = self.client.post('/new-post/', data={'post-title': 'A new blog post'})
+        self.client.post('/new-post/', data={'post-title': 'A new blog post'})
 
         self.assertEqual(Post.objects.count(), 1)
         new_post = Post.objects.first()
         self.assertEqual(new_post.title, 'A new blog post')
+
+    def test_redirects_after_a_POST(self):
+        """Test case: redirects after a POST."""
+        response = self.client.post('/new-post/', data={'post-title': 'A new blog post'})
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.get('location'), '/new-post/')
