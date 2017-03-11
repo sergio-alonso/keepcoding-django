@@ -2,6 +2,7 @@
 from django.core.urlresolvers import resolve
 from django.test import TestCase
 
+from blog.models import Post
 from blog.views import new_post_page
 
 
@@ -30,5 +31,15 @@ class NewPostPageTest(TestCase):
         A function that saves a post request.
         """
         response = self.client.post('/new-post/', data={'post-title': 'A new blog post'})
-        self.assertIn('A new blog post', response.content.decode())
-        self.assertTemplateUsed(response, 'new-post.html')
+
+        self.assertEqual(Post.objects.count(), 1)
+        new_post = Post.objects.first()
+        self.assertEqual(new_post.title, 'A new blog post')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.get('location'), '/new-post/')
+
+    def test_only_save_posts_when_necessary(self):
+        """Test case: only save posts when necessary."""
+        self.client.get('/new-post/')
+        self.assertEqual(Post.objects.count(), 0)

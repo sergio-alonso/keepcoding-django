@@ -1,5 +1,8 @@
 """Django blog app views."""
-from django.shortcuts import render
+
+from django.shortcuts import redirect, render
+
+from blog.models import Post
 
 
 def home_page(request):
@@ -9,6 +12,8 @@ def home_page(request):
 
 def new_post_page(request):
     """New post page view."""
-    return render(request, 'new-post.html', {
-        'new_post_title': request.POST.get('post-title'),
-    })
+    if request.method == 'POST':
+        Post.objects.create(title=request.POST.get('post-title', ''))
+        return redirect('/new-post/')
+
+    return render(request, 'new-post.html')
