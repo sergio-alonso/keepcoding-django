@@ -8,6 +8,7 @@ help:
 	@echo "test - Run all tests"
 	@echo "unit - Run unit tests"
 	@echo "functional - Run functional tests"
+	@echo "bd - Handle databse"
 
 run:
 	screen -S server python manage.py runserver
@@ -26,3 +27,6 @@ ft_anonymous:
 
 ft_user:
 	python ft_user.py
+
+db:
+	python manage.py makemigrations
