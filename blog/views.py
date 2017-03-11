@@ -9,4 +9,6 @@ def home_page(request):
 
 def new_post_page(request):
     """New post page view."""
-    return render(request, 'new-post.html')
+    return render(request, 'new-post.html', {
+        'new_post_title': request.POST.get('post-title'),
+    })

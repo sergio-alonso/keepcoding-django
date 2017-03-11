@@ -23,3 +23,12 @@ class NewPostPageTest(TestCase):
         """
         response = self.client.get('/new-post/')
         self.assertTemplateUsed(response, 'new-post.html')
+
+    def test_can_save_a_POST_request(self):
+        """Test case: save a POST request.
+
+        A function that saves a post request.
+        """
+        response = self.client.post('/new-post/', data={'post-title': 'A new blog post'})
+        self.assertIn('A new blog post', response.content.decode())
+        self.assertTemplateUsed(response, 'new-post.html')
