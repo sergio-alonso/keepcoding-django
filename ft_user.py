@@ -18,9 +18,9 @@ class UserTest(unittest.TestCase):
 
     def check_for_row_in_list_table(self, row_text):
         """Check if a text exists as table row."""
-        table = self.browser.find_element_by_class_name('blog_list')
+        table = self.browser.find_element_by_class_name('post-list')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text, [row.text for row in rows])
+        self.assertIn(row_text, [row_text for row in rows])
 
     def test_can_create_a_new_post(self):
         """Test Case: create a new post."""
@@ -41,7 +41,7 @@ class UserTest(unittest.TestCase):
         # When she hits enter, the page updates, and now the page lists
         # "My new blog posts" as a post in a blog list
         inputbox.send_keys(Keys.ENTER)
-        self.check_for_row_in_list_table('My new bog post')
+        self.check_for_row_in_list_table('My new blog post')
 
         # Then she sees that the site has generated a unique URL for her
 

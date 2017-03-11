@@ -16,4 +16,5 @@ def new_post_page(request):
         Post.objects.create(title=request.POST.get('post-title', ''))
         return redirect('/new-post/')
 
-    return render(request, 'new-post.html')
+    posts = Post.objects.all()
+    return render(request, 'new-post.html', {'posts': posts})

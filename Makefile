@@ -9,6 +9,7 @@ help:
 	@echo "unit - Run unit tests"
 	@echo "functional - Run functional tests"
 	@echo "bd - Handle databse"
+	@echo "db_clean - Recreate a fresh database"
 
 run:
 	screen -S server python manage.py runserver
@@ -30,3 +31,8 @@ ft_user:
 
 db:
 	python manage.py makemigrations
+	python manage.py migrate
+
+db_clean:
+	rm db.sqlite3
+	python manage.py migrate --noinput

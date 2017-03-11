@@ -47,3 +47,13 @@ class NewPostPageTest(TestCase):
         """Test case: only save posts when necessary."""
         self.client.get('/new-post/')
         self.assertEqual(Post.objects.count(), 0)
+
+    def test_displays_all_post_items(self):
+        """Test case: display all post items."""
+        Post.objects.create(title='blog post 0')
+        Post.objects.create(title='blog post 1')
+
+        response = self.client.get('/home/')
+
+        self.assertIn('blog post 0', response.content.decode())
+        self.assertIn('blog post 1', response.content.decode())
