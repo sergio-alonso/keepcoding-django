@@ -1,9 +1,8 @@
 """Django blog app tests."""
-from django.core.urlresolvers import resolve
-from django.test import TestCase
-
 from blog.models import Post
 from blog.views import new_post_page
+from django.core.urlresolvers import resolve
+from django.test import TestCase
 
 
 class NewPostViewTest(TestCase):

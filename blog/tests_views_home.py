@@ -1,8 +1,7 @@
 """Django blog app tests."""
+from blog.views import home_page
 from django.core.urlresolvers import resolve
 from django.test import TestCase
-
-from blog.views import home_page
 
 
 class HomePageTest(TestCase):

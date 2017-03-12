@@ -1,7 +1,6 @@
 """Django blog app tests."""
+from blog.models import Blog, Post
 from django.test import TestCase
-
-from blog.models import Post
 
 
 class ListPostViewTest(TestCase):
@@ -14,8 +13,9 @@ class ListPostViewTest(TestCase):
 
     def test_displays_all_post_items(self):
         """Test case: display all post items."""
-        Post.objects.create(title='blog post 0')
-        Post.objects.create(title='blog post 1')
+        blog = Blog.objects.create()
+        Post.objects.create(title='blog post 0', blog=blog)
+        Post.objects.create(title='blog post 1', blog=blog)
 
         response = self.client.get('/blog/the-only-blog-in-the-world/')
 
