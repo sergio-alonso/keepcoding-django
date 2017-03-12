@@ -40,8 +40,7 @@ class NewPostViewTest(TestCase):
         """Test case: redirects after a POST."""
         response = self.client.post('/new-post/', data={'post-title': 'A new blog post'})
 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.get('location'), '/blog/the-only-blog-in-the-world/')
+        self.assertRedirects(response, '/blog/the-only-blog-in-the-world/')
 
     def test_only_save_posts_when_necessary(self):
         """Test case: only save posts when necessary."""

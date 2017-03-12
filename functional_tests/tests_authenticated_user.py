@@ -97,7 +97,7 @@ class UserTest(django.test.LiveServerTestCase):
 
         # Bob gets its own unique URL
 
-        bob_blog_url = self.browser.curses
+        bob_blog_url = self.browser.current_url
         self.assertRegex(bob_blog_url, '/blog/.+')
 
         self.assertNotEqual(alice_blog_url, bob_blog_url)
