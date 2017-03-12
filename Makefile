@@ -19,6 +19,7 @@ run:
 test: ut ft
 
 ut:
+	@clear
 	python manage.py test blog
 
 ft:
