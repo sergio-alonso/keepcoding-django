@@ -46,3 +46,30 @@ class NewPostViewTest(TestCase):
         """Test case: only save posts when necessary."""
         self.client.get('/new-post/')
         self.assertEqual(Post.objects.count(), 0)
+
+    def test_can_save_a_POST_request_to_an_existing_blog(self):
+        """Test case: can save a post request to an existing blog."""
+        Blog.objects.create()  # create another blog
+        correct_blog = Blog.objects.create()
+
+        self.client.post(
+            '/blog/%d/add_post' % (correct_blog.id,),
+            data={'post_title': 'A new post for an existing blog'}
+        )
+
+        self.assertEqual(Post.objects.count(), 1)
+        new_post = Post.objects.first()
+        self.assertEqual(new_post.title, 'A new post for an existing blog')
+        self.assertEqual(new_post.blog, correct_blog)
+
+    def test_redirects_to_blog_view(self):
+        """Test case: redirects to blog view."""
+        Blog.objects.create()
+        correct_blog = Blog.objects.create()
+
+        response = self.client.post(
+            '/blog/%d/add_post' % (correct_blog.id,),
+            data={'post_title': 'A new post for an existing blog'}
+        )
+
+        self.assertRedirects(response, '/blog/%d/' % (correct_blog.id,))

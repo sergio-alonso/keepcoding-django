@@ -19,6 +19,7 @@ from blog import views
 
 urlpatterns = [
     url(r'^new-post/$', views.new_post_page, name='new-post'),
-    url(r'^blog/(.+)/$', views.list_posts, name='list-posts'),
+    url(r'^blog/(\d+)/$', views.list_posts, name='list-posts'),
+    url(r'^blog/(\d+)/add_post$', views.add_post, name='add-posts'),
     url(r'^$', views.home_page, name='home'),
 ]

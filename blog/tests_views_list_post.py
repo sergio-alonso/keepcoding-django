@@ -29,3 +29,10 @@ class ListPostViewTest(TestCase):
         self.assertContains(response, 'blog post 1')
         self.assertNotContains(response, 'other blog post 0')
         self.assertNotContains(response, 'other blog post 1')
+
+    def test_passes_correct_blog_to_template(self):
+        """Test case: passes correct blog to template."""
+        Blog.objects.create()  # Create another blog
+        correct_blog = Blog.objects.create()
+        response = self.client.get('/blog/%d/' % (correct_blog.id,))
+        self.assertEqual(response.context['blog'], correct_blog)

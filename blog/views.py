@@ -23,12 +23,18 @@ def new_post_page(request):
 def list_posts(request, blog_id):
     """List posts view."""
     blog = Blog.objects.get(id=blog_id)
-    posts = Post.objects.filter(blog=blog)
-    return render(request, 'list-posts.html', {'posts': posts})
+    return render(request, 'list-posts.html', {'blog': blog})
 
 
 def new_blog(request):
     """New blog."""
     blog = Blog.objects.create()
     Post.objects.create(title=request.POST.get('post-title', ''), blog=blog)
-    return redirect('/blogs/%d/' % (blog.id,))
+    return redirect('/blog/%d/' % (blog.id,))
+
+
+def add_post(request, blog_id):
+    """Add post."""
+    blog = Blog.objects.get(id=blog_id)
+    Post.objects.create(title=request.POST['post_title'], blog=blog)
+    return redirect('/blog/%d/' % (blog.id,))

@@ -5,13 +5,13 @@
   <body>
     <h1>Nueva entrada en el blog</h1>
 
-    <form method="POST" action="/new-post/">
+    <form method="POST" action="/blog/{{ blog.id }}/add_post">
       {% csrf_token %}
       <input name="post-title" class="post-title" placeholder="Enter a post title" />
     </form>
 
     <table class="post-list">
-      {% for post in posts %}
+      {% for post in blog.post_set.all %}
       <tr><td>{{ post.title }}</td></tr>
       {% endfor %}
     </table>
