@@ -1,7 +1,8 @@
 """Django blog app views."""
 
-from blog.models import Blog, Post
 from django.shortcuts import redirect, render
+
+from blog.models import Blog, Post
 
 
 def home_page(request):

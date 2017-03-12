@@ -13,9 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from blog import views
 from django.conf.urls import url
 
+from blog import views
 
 urlpatterns = [
     url(r'^new-post/$', views.new_post_page, name='new-post'),

@@ -1,9 +1,10 @@
 """Functional tests for authenticated users."""
+import time
+
 import django.test
 import selenium.common.exceptions
 import selenium.webdriver as webdriver
 import selenium.webdriver.common.keys
-import time
 
 
 class UserTest(django.test.LiveServerTestCase):

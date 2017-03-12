@@ -1,6 +1,7 @@
 """Django blog models tests."""
-from blog.models import Blog, Post
 from django.test import TestCase
+
+from blog.models import Blog, Post
 
 
 class PostModelTest(TestCase):
