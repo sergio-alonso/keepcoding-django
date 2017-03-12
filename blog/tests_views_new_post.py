@@ -2,7 +2,7 @@
 from django.core.urlresolvers import resolve
 from django.test import TestCase
 
-from blog.models import Post
+from blog.models import Blog, Post
 from blog.views import new_post_page
 
 
@@ -39,8 +39,8 @@ class NewPostViewTest(TestCase):
     def test_redirects_after_a_POST(self):
         """Test case: redirects after a POST."""
         response = self.client.post('/new-post/', data={'post-title': 'A new blog post'})
-
-        self.assertRedirects(response, '/blog/the-only-blog-in-the-world/')
+        blog = Blog.objects.first()
+        self.assertRedirects(response, '/blog/%d/' % (blog.id))
 
     def test_only_save_posts_when_necessary(self):
         """Test case: only save posts when necessary."""
