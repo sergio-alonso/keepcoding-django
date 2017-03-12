@@ -10,5 +10,10 @@
       <input name="post-title" class="post-title" placeholder="Enter a post title" />
     </form>
 
+    <table class="post-list">
+      {% for post in posts %}
+      <tr><td>{{ post.title }}</td></tr>
+      {% endfor %}
+    </table>
   </body>
 </html>

@@ -6,7 +6,7 @@ from blog.models import Post
 from blog.views import new_post_page
 
 
-class NewPostPageTest(TestCase):
+class NewPostViewTest(TestCase):
     """New post page test cases."""
 
     def test_url_resolves_to_new_post_page_view(self):
@@ -41,19 +41,9 @@ class NewPostPageTest(TestCase):
         response = self.client.post('/new-post/', data={'post-title': 'A new blog post'})
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.get('location'), '/new-post/')
+        self.assertEqual(response.get('location'), '/blog/the-only-blog-in-the-world/')
 
     def test_only_save_posts_when_necessary(self):
         """Test case: only save posts when necessary."""
         self.client.get('/new-post/')
         self.assertEqual(Post.objects.count(), 0)
-
-    def test_displays_all_post_items(self):
-        """Test case: display all post items."""
-        Post.objects.create(title='blog post 0')
-        Post.objects.create(title='blog post 1')
-
-        response = self.client.get('/new-post/')
-
-        self.assertIn('blog post 0', response.content.decode())
-        self.assertIn('blog post 1', response.content.decode())

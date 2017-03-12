@@ -1,5 +1,4 @@
 """Functional tests for authenticated users."""
-
 import time
 
 import django.test

@@ -14,7 +14,12 @@ def new_post_page(request):
     """New post page view."""
     if request.method == 'POST':
         Post.objects.create(title=request.POST.get('post-title', ''))
-        return redirect('/new-post/')
+        return redirect('/blog/the-only-blog-in-the-world/')
 
+    return render(request, 'new-post.html')
+
+
+def list_posts(request):
+    """List posts view."""
     posts = Post.objects.all()
-    return render(request, 'new-post.html', {'posts': posts})
+    return render(request, 'list-posts.html', {'posts': posts})
