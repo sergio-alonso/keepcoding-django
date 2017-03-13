@@ -1,14 +1,5 @@
-<html>
-  <head>
-    <title>Recursos</title>
-  </head>
-  <body>
-    <h1>Recursos</h1>
+{% extends 'base.html' %}
 
-    <form method="POST" action="/blog/new">
-      <input name="post-title" class="post-title" placeholder="Enter a post title" />
-      {% csrf_token %}
-    </form>
+{% block header_text %}Start a new blog{% endblock %}
 
-  </body>
-</html>
+{% block form_action %}/blog/new{% endblock %}

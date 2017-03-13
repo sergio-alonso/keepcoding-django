@@ -1,19 +1,13 @@
-<html>
-  <head>
-    <title>Nueva entrada en el blog</title>
-  </head>
-  <body>
-    <h1>Nueva entrada en el blog</h1>
+{% extends 'base.html' %}
 
-    <form method="POST" action="/blog/{{ blog.id }}/add_post">
-      {% csrf_token %}
-      <input name="post-title" class="post-title" placeholder="Enter a post title" />
-    </form>
+{% block header_text %}Tu blog{% endblock %}
 
-    <table class="post-list">
-      {% for post in blog.post_set.all %}
-      <tr><td>{{ post.title }}</td></tr>
-      {% endfor %}
-    </table>
-  </body>
-</html>
+{% block form_action %}/blog/{{ blog.id }}/add_post{% endblock %}
+
+{% block table %}
+<table class="post-list">
+  {% for post in blog.post_set.all %}
+  <tr><td>{{ post.title }}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

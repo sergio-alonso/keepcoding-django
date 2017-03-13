@@ -41,9 +41,9 @@ class UserTest(django.test.LiveServerTestCase):
         self.browser.get(self.live_server_url)
 
         # She notices the page title and header mention resource lists
-        self.assertIn('Recursos', self.browser.title)
+        self.assertIn('KeepCoding - Django', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Recursos', header_text)
+        self.assertIn('Start a new blog', header_text)
 
         # She is invited to enter a post title straight away
         inputbox = self.browser.find_element_by_class_name('post-title')
