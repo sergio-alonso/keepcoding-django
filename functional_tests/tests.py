@@ -1,13 +1,13 @@
 """Functional tests for authenticated users."""
 import time
 
-import django.test
 import selenium.common.exceptions
 import selenium.webdriver as webdriver
 import selenium.webdriver.common.keys
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
-class UserTest(django.test.LiveServerTestCase):
+class UserTest(StaticLiveServerTestCase):
     """Authenticated User Tests."""
 
     MAXWAIT = 10
