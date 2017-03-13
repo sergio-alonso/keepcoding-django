@@ -22,7 +22,7 @@ def new_blog(request):
         blog.delete()
         error = "You can't have an empty list item"
         return render(request, 'home.html', {"error": error})
-    return redirect('/blog/%d/' % (blog.id,))
+    return redirect(blog)
 
 
 def list_posts(request, blog_id):
@@ -35,7 +35,7 @@ def list_posts(request, blog_id):
             post = Post(title=request.POST.get('post-title', ''), blog=blog)
             post.full_clean()
             post.save()
-            return redirect('/blog/%d/' % (blog.id,))
+            return redirect(blog)
         except ValidationError:
             error = "You can't have an empty list item"
 

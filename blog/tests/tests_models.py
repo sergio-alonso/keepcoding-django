@@ -6,7 +6,7 @@ from blog.models import Blog, Post
 
 
 class PostModelTest(TestCase):
-    """Post model test cases."""
+    """Test suite: post model test cases."""
 
     def test_saving_and_retrieving_posts(self):
         """Test case: sva and retireve posts."""
@@ -44,3 +44,8 @@ class PostModelTest(TestCase):
         with self.assertRaises(ValidationError):
             post.save()
             post.full_clean()
+
+    def test_get_absolute_url(self):
+        """Test case: get absolute url."""
+        blog = Blog.objects.create()
+        self.assertEqual(blog.get_absolute_url(), '/blog/%d/' % (blog.id))
