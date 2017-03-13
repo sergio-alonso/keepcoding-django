@@ -2,30 +2,30 @@
 from django.test import TestCase
 from django.utils.html import escape
 
-from blog.forms import PostForm
+from blog.forms import PostForm, EMPTY_POST_TITLE_ERROR
 from blog.models import Blog, Post
 
 
 class HomeViewTest(TestCase):
-    """Home test cases."""
+    """Home view test suite."""
 
-    def test_home_page_returns_correct_html(self):
+    def test_uses_home_template(self):
         """Test case: home page returns correct HTML."""
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
-    def test_home_page_uses_posts_form(self):
+    def test_home_uses_posts_form(self):
         """Test case: home page uses posts form."""
         response = self.client.get('/')
         self.assertIsInstance(response.context['form'], PostForm)
 
 
 class NewBlogViewTest(TestCase):
-    """New blog page test cases."""
+    """New blog view test cases."""
 
     def test_can_save_a_POST_request(self):
         """Test case: can save a POST request."""
-        self.client.post('/blog/new', data={'post-title': 'A new blog post'})
+        self.client.post('/blog/new', data={'title': 'A new blog post'})
 
         self.assertEqual(Post.objects.count(), 1)
         new_post = Post.objects.first()
@@ -33,33 +33,48 @@ class NewBlogViewTest(TestCase):
 
     def test_redirects_after_a_POST(self):
         """Test case: redirects after a POST."""
-        response = self.client.post('/blog/new', data={'post-title': 'A new blog post'})
+        response = self.client.post('/blog/new', data={'title': 'A new blog post'})
         new_blog = Blog.objects.first()
         self.assertRedirects(response, '/blog/%d/' % (new_blog.id))
 
-    def test_validation_errors_are_sent_back_to_home_template(self):
-        """Test case: validation errors are sent back to home template."""
-        response = self.client.post('/blog/new', data={'item_text': ''})
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'home.html')
-        expected_error = escape("You can't have an empty list item")
-        self.assertContains(response, expected_error)
-
-    def test_invalid_list_items_arent_saved(self):
+    def test_invalid_blog_posts_arent_saved(self):
         """Test case: invalid list items arent saved."""
-        self.client.post('/blog/new', data={'post-title': ''})
+        self.client.post('/blog/new/', data={'title': ''})
         self.assertEqual(Blog.objects.count(), 0)
         self.assertEqual(Post.objects.count(), 0)
+
+    def test_for_invalid_input_renders_home_template(self):
+        """Test case: for invalid input renders home template."""
+        response = self.client.post('/blog/new', data={'title': str()})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+
+    def test_validation_errors_are_shown_on_home_page(self):
+        """Test case: validation errors are shown on home page."""
+        response = self.client.post('/blog/new', data={'title': ''})
+        self.assertContains(response, escape(EMPTY_POST_TITLE_ERROR))
+
+    def test_for_invalid_input_passes_form_to_template(self):
+        """Test case: forinvalid input passes form to template."""
+        response = self.client.post('/blog/new', data={'title': ''})
+        self.assertIsInstance(response.context['form'], PostForm)
 
 
 class ListPostViewTest(TestCase):
     """List post view test cases."""
 
-    def test_uses_list_post_template(self):
-        """Test case: use list post template."""
+    def test_uses_list_template(self):
+        """Test case: use list posts template."""
         blog = Blog.objects.create()
-        response = self.client.get('/blog/%d/' % (blog.id,))
+        response = self.client.get('/blog/%d/' % blog.id)
         self.assertTemplateUsed(response, 'list-posts.html')
+
+    def test_displays_post_form(self):
+        """Test case: display post form."""
+        blog = Blog.objects.create()
+        response = self.client.get('/blog/%d/' % (blog.id))
+        self.assertIsInstance(response.context['form'], PostForm)
+        self.assertContains(response, 'name="title"')
 
     def test_passes_correct_blog_to_template(self):
         """Test case: passes correct blog to template."""
@@ -93,7 +108,7 @@ class ListPostViewTest(TestCase):
 
         self.client.post(
             '/blog/%d/' % (correct_blog.id,),
-            data={'post-title': 'A new post for an existing blog'}
+            data={'title': 'A new post for an existing blog'}
         )
 
         self.assertEqual(Post.objects.count(), 1)
@@ -109,20 +124,37 @@ class ListPostViewTest(TestCase):
 
         response = self.client.post(
             '/blog/%d/' % (correct_blog.id,),
-            data={'post-title': 'A new post for an existing blog'}
+            data={'title': 'A new post for an existing blog'}
         )
 
         self.assertNotEqual(correct_blog.id, another_blog.id)
         self.assertRedirects(response, '/blog/%d/' % (correct_blog.id,))
 
-    def test_validation_errors_end_up_on_lists_page(self):
-        """Test case: validation errors end up on posts page."""
+    def post_invalid_input(self):
+        """Post invalid input."""
         blog = Blog.objects.create()
-        response = self.client.post(
-            '/blog/%d/' % (blog.id),
-            data={'post-title': ''}
+        return self.client.post(
+            '/blog/%d/' % (blog.id,),
+            data={'title': ''}
         )
+
+    def test_for_invalid_input_nothing_saved_to_db(self):
+        """Test case: for invalid input nothing saved to db."""
+        self.post_invalid_input()
+        self.assertEqual(Post.objects.count(), 0)
+
+    def test_for_invalid_input_renders_list_template(self):
+        """Test case: use list post template."""
+        response = self.post_invalid_input()
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list-posts.html')
-        expected_error = escape("You can't have an empty list item")
-        self.assertContains(response, expected_error)
+
+    def test_for_invalid_input_passes_form_to_template(self):
+        """Test case: for invalid input passes form to template."""
+        response = self.post_invalid_input()
+        self.assertIsInstance(response.context['form'], PostForm)
+
+    def test_for_invalid_input_shows_error_on_page(self):
+        """Test case: for invalid input shows error on page."""
+        response = self.post_invalid_input()
+        self.assertContains(response, escape(EMPTY_POST_TITLE_ERROR))

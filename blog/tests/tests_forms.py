@@ -1,4 +1,4 @@
-"""Django blog app test forms."""
+"""Django blog test forms."""
 from django.test import TestCase
 from blog.forms import PostForm, EMPTY_POST_TITLE_ERROR
 

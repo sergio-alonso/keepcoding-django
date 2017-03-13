@@ -23,3 +23,8 @@ class PostForm(forms.models.ModelForm):
         error_messages = {
             'title': {'required': EMPTY_POST_TITLE_ERROR}
         }
+
+    def save(self, for_blog):
+        """Save."""
+        self.instance.blog = for_blog
+        return super().save()

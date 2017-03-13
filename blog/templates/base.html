@@ -1,5 +1,9 @@
-<html>
+<!doctype html>
+<html lang="en">
+
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>KeepCoding - Django</title>
     <link href="/static/reset.css" rel="stylesheet">
   </head>
@@ -9,9 +13,9 @@
     <form method="POST" action="{% block form_action %}{% endblock %}">
       {{ form.title }}
       {% csrf_token %}
-      {% if error %}
+      {% if form.errors %}
       <div class="has-error">
-        <span class="help-block">{{ error }}</span>
+        <span class="help-block">{{ form.title.errors }}</span>
       </div>
       {% endif %}
     </form>

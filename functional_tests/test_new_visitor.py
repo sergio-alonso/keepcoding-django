@@ -20,7 +20,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('Start a new blog', header_text)
 
         # She is invited to enter a post title straight away
-        inputbox = self.browser.find_element_by_class_name('post-title')
+        inputbox = self.get_post_input_box()
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a post title'
@@ -35,7 +35,7 @@ class NewVisitorTest(FunctionalTest):
         # There is still a text box inviting her to add another item. She
         # enters "Use peacock feathers to make a fly" (Edith is very
         # methodical)
-        inputbox = self.browser.find_element_by_class_name('post-title')
+        inputbox = self.get_post_input_box()
         inputbox.send_keys('My second post')
         inputbox.send_keys(selenium.webdriver.common.keys.Keys.ENTER)
 
@@ -47,7 +47,7 @@ class NewVisitorTest(FunctionalTest):
         """Test case: multiple users can start blogs at different urls."""
         # Alice start a new blog
         self.browser.get(self.live_server_url)
-        input = self.browser.find_element_by_class_name('post-title')
+        input = self.get_post_input_box()
         input.send_keys('This is my first post')
         input.send_keys(webdriver.common.keys.Keys.ENTER)
         self.wait_for_row_in_post_table('This is my first post')
@@ -72,7 +72,7 @@ class NewVisitorTest(FunctionalTest):
 
         # Bob starts new blog by entering a new post
 
-        input = self.browser.find_element_by_class_name('post-title')
+        input = self.get_post_input_box()
         input.send_keys('Lorem itsum')
         input.send_keys(webdriver.common.keys.Keys.ENTER)
         self.wait_for_row_in_post_table('Lorem itsum')

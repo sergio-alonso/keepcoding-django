@@ -1,4 +1,4 @@
-"""Django blog app models."""
+"""Django blog models."""
 from django.db import models
 from django.core.urlresolvers import reverse
 
@@ -9,8 +9,6 @@ class Blog(models.Model):
     def get_absolute_url(self):
         """Say what page displays the item."""
         return reverse('list-posts', args=[self.id])
-
-    pass
 
 
 class Post(models.Model):

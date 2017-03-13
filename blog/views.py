@@ -1,43 +1,34 @@
-"""Django blog app views."""
-
+"""Django blog views."""
 from django.shortcuts import redirect, render
-from django.core.exceptions import ValidationError
 
 from blog.forms import PostForm
-from blog.models import Blog, Post
+from blog.models import Blog
 
 
 def home_page(request):
-    """Home page view."""
+    """Home view."""
     return render(request, 'home.html', {'form': PostForm()})
 
 
 def new_blog(request):
-    """New blog page view."""
-    blog = Blog.objects.create()
-    post = Post(title=request.POST.get('post-title', ''), blog=blog)
-    try:
-        post.full_clean()
-        post.save()
-    except ValidationError:
-        blog.delete()
-        error = "You can't have an empty list item"
-        return render(request, 'home.html', {"error": error})
-    return redirect(blog)
+    """New blog view."""
+    form = PostForm(data=request.POST)
+    if form.is_valid():
+        blog = Blog.objects.create()
+        form.save(for_blog=blog)
+        return redirect(blog)
+    else:
+        return render(request, 'home.html', {'form': form})
 
 
 def list_posts(request, blog_id):
     """List posts view."""
     blog = Blog.objects.get(id=blog_id)
-    error = None
+    form = PostForm()
 
     if request.method == 'POST':
-        try:
-            post = Post(title=request.POST.get('post-title', ''), blog=blog)
-            post.full_clean()
-            post.save()
+        form = PostForm(data=request.POST)
+        if form.is_valid():
+            form.save(for_blog=blog)
             return redirect(blog)
-        except ValidationError:
-            error = "You can't have an empty list item"
-
-    return render(request, 'list-posts.html', {'blog': blog, "error": error})
+    return render(request, 'list-posts.html', {'blog': blog, "form": form})
