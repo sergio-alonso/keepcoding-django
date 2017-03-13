@@ -36,7 +36,7 @@ class PostValidationTest(FunctionalTest):
         ))
 
         # And she can correct it by filling some text in
-        self.browser.find_element_by_css_selector('post-title').send_keys('Second post')
-        self.browser.find_element_by_css_selector('post-title').send_keys(Keys.ENTER)
+        self.browser.find_element_by_class_name('post-title').send_keys('Second post')
+        self.browser.find_element_by_class_name('post-title').send_keys(Keys.ENTER)
         self.wait_for_row_in_post_table('First post')
         self.wait_for_row_in_post_table('Second post')
