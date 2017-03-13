@@ -3,12 +3,13 @@
 from django.shortcuts import redirect, render
 from django.core.exceptions import ValidationError
 
+from blog.forms import PostForm
 from blog.models import Blog, Post
 
 
 def home_page(request):
     """Home page view."""
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'form': PostForm()})
 
 
 def new_blog(request):

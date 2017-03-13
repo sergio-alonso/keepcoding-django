@@ -2,6 +2,7 @@
 from django.test import TestCase
 from django.utils.html import escape
 
+from blog.forms import PostForm
 from blog.models import Blog, Post
 
 
@@ -12,6 +13,11 @@ class HomeViewTest(TestCase):
         """Test case: home page returns correct HTML."""
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
+
+    def test_home_page_uses_posts_form(self):
+        """Test case: home page uses posts form."""
+        response = self.client.get('/')
+        self.assertIsInstance(response.context['form'], PostForm)
 
 
 class NewBlogViewTest(TestCase):
