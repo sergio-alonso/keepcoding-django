@@ -24,6 +24,7 @@ ut:
 	python manage.py test blog
 
 ft:
+	@clear
 	python manage.py test functional_tests
 
 db:

@@ -1,6 +1,7 @@
 """Django blog app views."""
 
 from django.shortcuts import redirect, render
+from django.core.exceptions import ValidationError
 
 from blog.models import Blog, Post
 
@@ -13,7 +14,14 @@ def home_page(request):
 def new_blog(request):
     """New blog page view."""
     blog = Blog.objects.create()
-    Post.objects.create(title=request.POST.get('post-title', ''), blog=blog)
+    post = Post.objects.create(title=request.POST.get('post-title', ''), blog=blog)
+    try:
+        post.full_clean()
+        post.save()
+    except ValidationError:
+        blog.delete()
+        error = "You can't have an empty list item"
+        return render(request, 'home.html', {"error": error})
     return redirect('/blog/%d/' % (blog.id,))
 
 

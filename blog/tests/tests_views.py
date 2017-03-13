@@ -1,5 +1,6 @@
 """Django blog view tests."""
 from django.test import TestCase
+from django.utils.html import escape
 
 from blog.models import Blog, Post
 
@@ -29,6 +30,20 @@ class NewBlogViewTest(TestCase):
         response = self.client.post('/blog/new', data={'post-title': 'A new blog post'})
         new_blog = Blog.objects.first()
         self.assertRedirects(response, '/blog/%d/' % (new_blog.id))
+
+    def test_validation_errors_are_sent_back_to_home_template(self):
+        """Test case: validation errors are sent back to home template."""
+        response = self.client.post('/blog/new', data={'item_text': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        expected_error = escape("You can't have an empty list item")
+        self.assertContains(response, expected_error)
+
+    def test_invalid_list_items_arent_saved(self):
+        """Test case: invalid list items arent saved."""
+        self.client.post('/blog/new', data={'post-title': ''})
+        self.assertEqual(Blog.objects.count(), 0)
+        self.assertEqual(Post.objects.count(), 0)
 
 
 class NewPostTest(TestCase):

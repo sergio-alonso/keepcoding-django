@@ -21,7 +21,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         """Test case tearDown."""
         self.browser.quit()
 
-    def wait_for_row_in_list_table(self, row_text):
+    def wait_for_row_in_post_table(self, row_text):
         """Check if a text exists as table row."""
         start_time = time.time()
         while True:
@@ -30,6 +30,17 @@ class FunctionalTest(StaticLiveServerTestCase):
                 rows = table.find_elements_by_tag_name('tr')
                 self.assertIn(row_text, [row.text for row in rows])
                 return
+            except (AssertionError, selenium.common.exceptions.WebDriverException) as e:
+                if time.time() - start_time > self.MAXWAIT:
+                    raise e
+                time.sleep(0.5)
+
+    def wait_for(self, fn):
+        """Check if a text exists as table row."""
+        start_time = time.time()
+        while True:
+            try:
+                return fn()
             except (AssertionError, selenium.common.exceptions.WebDriverException) as e:
                 if time.time() - start_time > self.MAXWAIT:
                     raise e

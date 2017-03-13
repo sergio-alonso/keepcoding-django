@@ -1,5 +1,6 @@
 """Django blog models tests."""
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from blog.models import Blog, Post
 
@@ -35,3 +36,11 @@ class PostModelTest(TestCase):
         self.assertEqual(first_saved_item.blog, blog)
         self.assertEqual(second_saved_item.title, 'A second post')
         self.assertEqual(second_saved_item.blog, blog)
+
+    def test_cannot_create_empty_blog_posts(self):
+        """Test case: cannot create empty blog posts."""
+        blog = Blog.objects.create()
+        post = Post(blog=blog, title='')
+        with self.assertRaises(ValidationError):
+            post.save()
+            post.full_clean()
