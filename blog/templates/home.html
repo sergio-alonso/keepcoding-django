@@ -4,8 +4,11 @@
   </head>
   <body>
     <h1>Recursos</h1>
-    <main id="main">
-      <article>Articulo 1</article>
-    </main>
+
+    <form method="POST" action="/blog/new">
+      <input name="post-title" class="post-title" placeholder="Enter a post title" />
+      {% csrf_token %}
+    </form>
+
   </body>
 </html>
