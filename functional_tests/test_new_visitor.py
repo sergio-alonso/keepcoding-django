@@ -1,38 +1,12 @@
 """Functional tests for authenticated users."""
-import time
+from .functional_test import FunctionalTest
 
-import selenium.common.exceptions
 import selenium.webdriver as webdriver
 import selenium.webdriver.common.keys
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
-class UserTest(StaticLiveServerTestCase):
-    """Authenticated User Tests."""
-
-    MAXWAIT = 10
-
-    def setUp(self):
-        """Test case setUp."""
-        self.browser = webdriver.Firefox()
-
-    def tearDown(self):
-        """Test case tearDown."""
-        self.browser.quit()
-
-    def wait_for_row_in_list_table(self, row_text):
-        """Check if a text exists as table row."""
-        start_time = time.time()
-        while True:
-            try:
-                table = self.browser.find_element_by_class_name('post-list')
-                rows = table.find_elements_by_tag_name('tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return
-            except (AssertionError, selenium.common.exceptions.WebDriverException) as e:
-                if time.time() - start_time > self.MAXWAIT:
-                    raise e
-                time.sleep(0.5)
+class NewVisitorTest(FunctionalTest):
+    """New Visitor Test."""
 
     def test_can_start_a_blog_for_one_user(self):
         """Test Case: list last post on home page."""
