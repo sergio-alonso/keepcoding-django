@@ -10,6 +10,7 @@ help:
 	@echo "ft - Run functional tests"
 	@echo "bd - Handle databse"
 	@echo "db_clean - Recreate a fresh database"
+	@echo "static - Handle static files"
 
 run:
 	screen -S server python manage.py runserver
@@ -32,3 +33,6 @@ db:
 db_clean:
 	rm db.sqlite3
 	python manage.py migrate --noinput
+
+static:
+	python manage.py collectstatic
