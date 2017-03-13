@@ -25,14 +25,10 @@ def new_blog(request):
     return redirect('/blog/%d/' % (blog.id,))
 
 
-def add_post(request, blog_id):
-    """Add post."""
-    blog = Blog.objects.get(id=blog_id)
-    Post.objects.create(title=request.POST.get('post-title', ''), blog=blog)
-    return redirect('/blog/%d/' % (blog.id,))
-
-
 def list_posts(request, blog_id):
     """List posts view."""
     blog = Blog.objects.get(id=blog_id)
+    if request.method == 'POST':
+        Post.objects.create(title=request.POST.get('post-title', ''), blog=blog)
+        return redirect('/blog/%d/' % (blog.id,))
     return render(request, 'list-posts.html', {'blog': blog})

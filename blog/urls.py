@@ -20,5 +20,4 @@ from blog import views
 urlpatterns = [
     url(r'^new$', views.new_blog, name='new-blog'),
     url(r'^(\d+)/$', views.list_posts, name='list-posts'),
-    url(r'^(\d+)/add_post$', views.add_post, name='add-posts'),
 ]

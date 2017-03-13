@@ -46,39 +46,6 @@ class NewBlogViewTest(TestCase):
         self.assertEqual(Post.objects.count(), 0)
 
 
-class NewPostTest(TestCase):
-    """New post test case."""
-
-    def test_can_save_a_POST_request_to_an_existing_blog(self):
-        """Test case: can save a post request to an existing blog."""
-        another_blog = Blog.objects.create()
-        correct_blog = Blog.objects.create()
-
-        self.client.post(
-            '/blog/%d/add_post' % (correct_blog.id,),
-            data={'post-title': 'A new post for an existing blog'}
-        )
-
-        self.assertEqual(Post.objects.count(), 1)
-        new_post = Post.objects.first()
-        self.assertEqual(new_post.title, 'A new post for an existing blog')
-        self.assertEqual(new_post.blog, correct_blog)
-        self.assertNotEqual(new_post.blog, another_blog)
-
-    def test_redirects_to_blog_view(self):
-        """Test case: redirects to blog view."""
-        another_blog = Blog.objects.create()
-        correct_blog = Blog.objects.create()
-
-        response = self.client.post(
-            '/blog/%d/add_post' % (correct_blog.id,),
-            data={'post_title': 'A new post for an existing blog'}
-        )
-
-        self.assertNotEqual(correct_blog.id, another_blog.id)
-        self.assertRedirects(response, '/blog/%d/' % (correct_blog.id,))
-
-
 class ListPostViewTest(TestCase):
     """List post view test cases."""
 
@@ -112,3 +79,32 @@ class ListPostViewTest(TestCase):
         self.assertContains(response, 'blog post 1')
         self.assertNotContains(response, 'another blog post 0')
         self.assertNotContains(response, 'another blog post 1')
+
+    def test_can_save_a_POST_request_to_an_existing_blog(self):
+        """Test case: can save a post request to an existing blog."""
+        another_blog = Blog.objects.create()
+        correct_blog = Blog.objects.create()
+
+        self.client.post(
+            '/blog/%d/' % (correct_blog.id,),
+            data={'post-title': 'A new post for an existing blog'}
+        )
+
+        self.assertEqual(Post.objects.count(), 1)
+        new_post = Post.objects.first()
+        self.assertEqual(new_post.title, 'A new post for an existing blog')
+        self.assertEqual(new_post.blog, correct_blog)
+        self.assertNotEqual(new_post.blog, another_blog)
+
+    def test_POST_redirects_to_blog_view(self):
+        """Test case: redirects to blog view."""
+        another_blog = Blog.objects.create()
+        correct_blog = Blog.objects.create()
+
+        response = self.client.post(
+            '/blog/%d/' % (correct_blog.id,),
+            data={'post_title': 'A new post for an existing blog'}
+        )
+
+        self.assertNotEqual(correct_blog.id, another_blog.id)
+        self.assertRedirects(response, '/blog/%d/' % (correct_blog.id,))
