@@ -103,8 +103,20 @@ class ListPostViewTest(TestCase):
 
         response = self.client.post(
             '/blog/%d/' % (correct_blog.id,),
-            data={'post_title': 'A new post for an existing blog'}
+            data={'post-title': 'A new post for an existing blog'}
         )
 
         self.assertNotEqual(correct_blog.id, another_blog.id)
         self.assertRedirects(response, '/blog/%d/' % (correct_blog.id,))
+
+    def test_validation_errors_end_up_on_lists_page(self):
+        """Test case: validation errors end up on posts page."""
+        blog = Blog.objects.create()
+        response = self.client.post(
+            '/blog/%d/' % (blog.id),
+            data={'post-title': ''}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'list-posts.html')
+        expected_error = escape("You can't have an empty list item")
+        self.assertContains(response, expected_error)
