@@ -126,7 +126,7 @@ STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../keepcoding-django-stati
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Account authentication
-AUTH_USER_MODEL = 'accounts.ListUser'
+AUTH_USER_MODEL = 'accounts.User'
 AUTHENTICATION_BACKENDS = [
     'accounts.authentication.PasswordlessAuthenticationBackend',
 ]
