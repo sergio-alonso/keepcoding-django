@@ -1,6 +1,5 @@
 """Django accounts views."""
 from django.contrib import auth, messages
-from django.contrib.auth import logout as auth_logout
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -34,10 +33,4 @@ def login(request):
     user = auth.authenticate(uid=uid)
     if user:
         auth.login(request, user)
-    return redirect('/')
-
-
-def logout(request):
-    """Logout."""
-    auth_logout(request)
     return redirect('/')
