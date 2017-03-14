@@ -1,4 +1,4 @@
-.PHONY: help test server unit functional
+.PHONY: help run test ut ft db db_clean static
 
 default: help
 

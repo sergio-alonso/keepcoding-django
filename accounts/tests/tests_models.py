@@ -1,9 +1,9 @@
 """Django accounts tests."""
 from django.test import TestCase
-from django.contrib.auth import get_user_model
+from django.contrib import auth
 from accounts.models import Token
 
-User = get_user_model()
+User = auth.get_user_model()
 
 
 class UserModelTest(TestCase):
@@ -18,6 +18,13 @@ class UserModelTest(TestCase):
         """Test case: user is valid with email."""
         user = User(email='user.name@example.com')
         user.full_clean()  # should not raise
+
+    def test_no_problem_with_auth_login(self):
+        """Test case: no problem with auth login."""
+        user = User.objects.create(email='user.name@example.com')
+        user.backend = ''
+        request = self.client.request().wsgi_request
+        auth.login(request, user)  # should not raise
 
 
 class TokenModelTest(TestCase):
