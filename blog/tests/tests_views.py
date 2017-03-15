@@ -1,9 +1,12 @@
 """Django blog view tests."""
 from django.test import TestCase
 from django.utils.html import escape
+from django.contrib.auth import get_user_model
 
 from blog.forms import PostForm, EMPTY_POST_TITLE_ERROR
 from blog.models import Blog, Post
+
+User = get_user_model()
 
 
 class HomeViewTest(TestCase):
@@ -158,3 +161,21 @@ class ListPostViewTest(TestCase):
         """Test case: for invalid input shows error on page."""
         response = self.post_invalid_input()
         self.assertContains(response, escape(EMPTY_POST_TITLE_ERROR))
+
+
+class MyBlogTest(TestCase):
+    """My blog test suite."""
+
+    def test_my_blog_url_renders_my_blog_template(self):
+        """Test case: my blog url renders my blog template."""
+        User.objects.create(email='user.name@example.com')
+        response = self.client.get('/blog/users/user.name@example.com/')
+        self.assertTemplateUsed(response, 'my_blog.html')
+
+    def test_blog_owner_is_saved_if_user_is_authenticated(self):
+        """Test case: blog owner is saved if user is authenticated."""
+        user = User.objects.create(email='user.name@example.com')
+        self.client.force_login(user)
+        self.client.post('/blog/new', data={'title': 'new post'})
+        blog = Blog.objects.first()
+        self.assertEqual(blog.owner, user)

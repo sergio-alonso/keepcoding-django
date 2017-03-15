@@ -3,7 +3,7 @@ import time
 
 import selenium.common.exceptions
 import selenium.webdriver as webdriver
-import selenium.webdriver.common.keys
+from selenium.webdriver.common.keys import Keys
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 MAX_WAIT = 10
@@ -64,3 +64,11 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.find_element_by_name('email')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertNotIn(email, navbar.text)
+
+    def add_blog_post(self, post_title):
+        """Add blog post."""
+        self.get_post_input_box().send_keys(post_title)
+        self.get_post_input_box().send_keys(Keys.ENTER)
+        self.wait_for_row_in_post_table(
+            '{}'.format(post_title)
+        )

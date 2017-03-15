@@ -6,4 +6,5 @@ from blog import views
 urlpatterns = [
     url(r'^new$', views.new_blog, name='new-blog'),
     url(r'^(\d+)/$', views.list_posts, name='list-posts'),
+    url(r'^users/(.+)/$', views.my_blog, name='my-blog'),
 ]

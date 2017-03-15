@@ -1,8 +1,11 @@
 """Django blog views."""
 from django.shortcuts import redirect, render
+from django.contrib.auth import get_user_model
 
 from blog.forms import PostForm
 from blog.models import Blog
+
+User = get_user_model()
 
 
 def home_page(request):
@@ -15,6 +18,8 @@ def new_blog(request):
     form = PostForm(data=request.POST)
     if form.is_valid():
         blog = Blog.objects.create()
+        blog.owner = request.user
+        blog.save()
         form.save(for_blog=blog)
         return redirect(blog)
     else:
@@ -32,3 +37,9 @@ def list_posts(request, blog_id):
             form.save(for_blog=blog)
             return redirect(blog)
     return render(request, 'list-posts.html', {'blog': blog, "form": form})
+
+
+def my_blog(request, email):
+    """My blog."""
+    owner = User.objects.get(email=email)
+    return render(request, 'my_blog.html', {'owner': owner})
