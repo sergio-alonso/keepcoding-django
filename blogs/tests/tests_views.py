@@ -9,3 +9,12 @@ class HomeViewTest(TestCase):
         """Test case: uses home template."""
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
+
+
+class BlogViewTest(TestCase):
+    """Test suite: blog view."""
+
+    def test_uses_blog_template(self):
+        """Test case: uses blog template."""
+        response = self.client.get('/blogs/user.name@example.com/')
+        self.assertTemplateUsed(response, 'blog.html')
