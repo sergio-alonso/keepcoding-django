@@ -16,11 +16,12 @@ Including another URLconf
 from django.conf.urls import include, url
 
 from accounts import urls as accounts_urls
-#from blogs import urls as blogs_urls
-#from blogs import views as blogs_views
+from blogs import urls as blogs_urls
+
+from blogs import views as blogs_views
 
 urlpatterns = [
-#    url(r'^$', blogs_views.home_page, name='home'),
+    url(r'^$', blogs_views.home, name='home'),
 #    url(r'^blogs/', include(blogs_urls)),
     url(r'^accounts/', include(accounts_urls)),
 ]
