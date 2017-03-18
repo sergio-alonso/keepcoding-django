@@ -2,7 +2,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import get_user_model
 
-from blog.forms import PostForm
+from blog.forms import PostForm, NewBlogForm
 from blog.models import Blog
 
 User = get_user_model()
@@ -14,16 +14,12 @@ def home_page(request):
 
 
 def new_blog(request):
-    """New blog view."""
-    form = PostForm(data=request.POST)
+    """New blog."""
+    form = NewBlogForm(data=request.POST)
     if form.is_valid():
-        blog = Blog.objects.create()
-        blog.owner = request.user
-        blog.save()
-        form.save(for_blog=blog)
+        blog = form.save(owner=request.user)
         return redirect(blog)
-    else:
-        return render(request, 'home.html', {'form': form})
+    return render(request, 'home.html', {'form': form})
 
 
 def list_posts(request, blog_id):

@@ -1,7 +1,7 @@
 """Django blog forms."""
 from django import forms
 
-from blog.models import Post
+from blog.models import Post, Blog
 
 EMPTY_POST_TITLE_ERROR = "You can't have an empty post title"
 
@@ -24,7 +24,13 @@ class PostForm(forms.models.ModelForm):
             'title': {'required': EMPTY_POST_TITLE_ERROR}
         }
 
-    def save(self, for_blog):
+
+class NewBlogForm(PostForm):
+    """New blog form."""
+
+    def save(self, owner):
         """Save."""
-        self.instance.blog = for_blog
-        return super().save()
+        if owner.is_authenticated:
+            return Blog.create_new(first_post_title=self.cleaned_data['title'], owner=owner)
+        else:
+            return Blog.create_new(first_post_title=self.cleaned_data['title'])

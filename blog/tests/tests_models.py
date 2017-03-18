@@ -1,9 +1,11 @@
 """Django blog models tests."""
 from django.test import TestCase
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
 from blog.models import Blog, Post
 
+User = get_user_model()
 
 class PostModelTest(TestCase):
     """Test suite: post model test cases."""
@@ -49,3 +51,43 @@ class PostModelTest(TestCase):
         """Test case: get absolute url."""
         blog = Blog.objects.create()
         self.assertEqual(blog.get_absolute_url(), '/blog/%d/' % (blog.id))
+
+    def test_create_new_creates_blog_and_first_post(self):
+        """Test case: create new creates blog and first post."""
+        Blog.create_new(first_post_title='New post title')
+        new_post = Post.objects.first()
+        self.assertEqual(new_post.title, 'New post title')
+        new_blog = Blog.objects.first()
+        self.assertEqual(new_post.blog, new_blog)
+
+    def test_create_new_optionally_saves_owner(self):
+        """Test case: create new optionally saves owner."""
+        user = User.objects.create()
+        Blog.create_new(first_post_title='New item text', owner=user)
+        new_blog = Blog.objects.first()
+        self.assertEqual(new_blog.owner, user)
+
+
+class BlogModelTest(TestCase):
+    """Test suite: Blog model test.."""
+
+    def test_blog_can_have_owners(self):
+        """Test case: blog can have owners."""
+        Blog(owner=User())  # should not raise
+
+    def test_blog_owner_is_optional(self):
+        """Test case: blog owner is optional."""
+        Blog().full_clean()  # should not raise
+
+    def test_create_returns_new_blog_object(self):
+        """Test case: create returns new blog object."""
+        returned = Blog.create_new(first_post_title='New post title')
+        new_blog = Blog.objects.first()
+        self.assertEqual(returned, new_blog)
+
+    def test_blog_name_is_first_post_title(self):
+        """Test case: blog name is first post title."""
+        blog = Blog.objects.create()
+        Post.objects.create(blog=blog, title='first post')
+        Post.objects.create(blog=blog, title='second post')
+        self.assertEqual(blog.name, 'first post')

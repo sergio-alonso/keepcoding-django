@@ -5,6 +5,11 @@ from django.contrib.auth import get_user_model
 
 from blog.forms import PostForm, EMPTY_POST_TITLE_ERROR
 from blog.models import Blog, Post
+from blog.views import new_blog
+
+import unittest
+from unittest.mock import patch, Mock
+from django.http import HttpRequest
 
 User = get_user_model()
 
@@ -23,7 +28,54 @@ class HomeViewTest(TestCase):
         self.assertIsInstance(response.context['form'], PostForm)
 
 
-class NewBlogViewTest(TestCase):
+@patch('blog.views.NewBlogForm')
+class NewBlogViewUnitTest(unittest.TestCase):
+    """New blog view unit test."""
+
+    def setUp(self):
+        """"Setup."""
+        self.request = HttpRequest()
+        self.request.POST['title'] = "New blog post"
+        self.request.user = Mock()
+
+    def test_passes_POST_data_to_NewBlogFrom(self, mockNewBlogForm):
+        """Test case: passes POST data to NewBlogForm."""
+        new_blog(self.request)
+        mockNewBlogForm.assert_called_once_with(data=self.request.POST)
+
+    @patch('blog.views.redirect')
+    def test_redirects_to_form_with_owner_if_form_valid(self, mock_redirect, mockNewBlogForm):
+        """Test cas: redirects to form with owner if form valid."""
+        mock_form = mockNewBlogForm.return_value
+        mock_form.is_valid.return_value = True
+
+        response = new_blog(self.request)
+
+        self.assertEqual(response, mock_redirect.return_value)
+        mock_redirect.assert_called_once_with(mock_form.save.return_value)
+
+    @patch('blog.views.render')
+    def test_renders_home_template_with_form_if_form_is_invalid(self, mock_render, mockNewBlogForm):
+        """Test case: renders home template with form if form is invalid."""
+        mock_form = mockNewBlogForm.return_value
+        mock_form.is_valid.return_value = False
+
+        response = new_blog(self.request)
+
+        self.assertEqual(response, mock_render.return_value)
+        mock_render.assert_called_once_with(self.request, 'home.html', {'form': mock_form})
+
+    def test_does_not_save_if_form_invalid(self, mockNewBlogForm):
+        """Test case: does not save if form invalid."""
+        mock_form = mockNewBlogForm.return_value
+        mock_form.is_valid.return_value = False
+
+        new_blog(self.request)
+
+        self.assertFalse(mock_form.save.called)
+
+
+class NewBlogViewIntegratedTest(TestCase):
     """New blog view test cases."""
 
     def test_can_save_a_POST_request(self):
@@ -42,7 +94,7 @@ class NewBlogViewTest(TestCase):
 
     def test_invalid_blog_posts_arent_saved(self):
         """Test case: invalid list items arent saved."""
-        self.client.post('/blog/new/', data={'title': ''})
+        self.client.post('/blog/new', data={'title': ''})
         self.assertEqual(Blog.objects.count(), 0)
         self.assertEqual(Post.objects.count(), 0)
 
@@ -61,6 +113,14 @@ class NewBlogViewTest(TestCase):
         """Test case: forinvalid input passes form to template."""
         response = self.client.post('/blog/new', data={'title': ''})
         self.assertIsInstance(response.context['form'], PostForm)
+
+    def test_blog_owner_is_saved_if_user_is_authenticated(self):
+        """Test case: blog owner is saved if user is authenticated."""
+        user = User.objects.create(email='user.name@example.com')
+        self.client.force_login(user)
+        self.client.post('/blog/new', data={'title': 'new post'})
+        blog = Blog.objects.first()
+        self.assertEqual(blog.owner, user)
 
 
 class ListPostViewTest(TestCase):
@@ -104,6 +164,7 @@ class ListPostViewTest(TestCase):
         self.assertNotContains(response, 'another blog post 0')
         self.assertNotContains(response, 'another blog post 1')
 
+    @unittest.skip
     def test_can_save_a_POST_request_to_an_existing_blog(self):
         """Test case: can save a post request to an existing blog."""
         another_blog = Blog.objects.create()
@@ -120,6 +181,7 @@ class ListPostViewTest(TestCase):
         self.assertEqual(new_post.blog, correct_blog)
         self.assertNotEqual(new_post.blog, another_blog)
 
+    @unittest.skip
     def test_POST_redirects_to_blog_view(self):
         """Test case: redirects to blog view."""
         another_blog = Blog.objects.create()
@@ -171,11 +233,3 @@ class MyBlogTest(TestCase):
         User.objects.create(email='user.name@example.com')
         response = self.client.get('/blog/users/user.name@example.com/')
         self.assertTemplateUsed(response, 'my_blog.html')
-
-    def test_blog_owner_is_saved_if_user_is_authenticated(self):
-        """Test case: blog owner is saved if user is authenticated."""
-        user = User.objects.create(email='user.name@example.com')
-        self.client.force_login(user)
-        self.client.post('/blog/new', data={'title': 'new post'})
-        blog = Blog.objects.first()
-        self.assertEqual(blog.owner, user)
