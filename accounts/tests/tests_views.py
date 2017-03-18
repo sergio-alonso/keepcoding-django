@@ -69,7 +69,7 @@ class LoginViewTest(TestCase):
         """Test case: redirects to home page."""
         mock_auth.authenticate().email = "user.name@example.com"
         response = self.client.get('/accounts/login?token=abc123')
-        self.assertRedirects(response, '/blogs/user.name@example.com')
+        self.assertRedirects(response, '/blogs/user.name@example.com/')
 
     def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
         """Test case: calls authenticate with uid from get request."""

@@ -33,7 +33,7 @@ def login(request):
     user = auth.authenticate(uid=uid)
     if user:
         auth.login(request, user)
-        return redirect('/blogs/%s' % user.email)
+        return redirect('/blogs/%s/' % user.email)
     messages.warning(
         request,
         "Something was wrong. Try it again."
