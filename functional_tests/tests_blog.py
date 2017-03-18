@@ -1,10 +1,10 @@
-"""Functional tests for my blog."""
+"""Functional tests for a blog."""
 
 from .functional_test import FunctionalTest
 
 
-class MyBlogTest(FunctionalTest):
-    """Test suite: my blog test."""
+class BlogTest(FunctionalTest):
+    """Test suite: blog test."""
 
     def test_logged_in_users_blog_are_saved_as_my_blog(self):
         """Test case: logged in users blog are saved as my blog."""
