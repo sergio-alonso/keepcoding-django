@@ -11,21 +11,20 @@ from selenium.common.exceptions import WebDriverException
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
-# MAX_WAIT = 10
+MAX_WAIT = 10
 
-
-# def wait(fn):
-#     """Wait."""
-#     def modified_fn(*args, **kwargs):
-#         start_time = time.time()
-#         while True:
-#             try:
-#                 return fn(*args, **kwargs)
-#             except (AssertionError, WebDriverException) as e:
-#                 if time.time() - start_time > MAX_WAIT:
-#                     raise e
-#                 time.sleep(0.5)
-#     return modified_fn
+def wait(fn):
+    """Wait."""
+    def modified_fn(*args, **kwargs):
+        start_time = time.time()
+        while True:
+            try:
+                return fn(*args, **kwargs)
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
+    return modified_fn
 
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -40,10 +39,24 @@ class FunctionalTest(StaticLiveServerTestCase):
         """Test case tearDown."""
         self.browser.quit()
 
-    # @wait
-    # def wait_for(self, fn):
-    #     """Wait for."""
-    #     return fn()
+    @wait
+    def wait_for(self, fn):
+        """Wait for."""
+        return fn()
+
+    @wait
+    def wait_to_be_logged_in(self, email):
+        """Wait to be logged in."""
+        self.browser.find_element_by_link_text('Log out')
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertIn(email, navbar.text)
+
+    @wait
+    def wait_to_be_logged_out(self, email):
+        """Wait to be logged out."""
+        self.browser.find_element_by_name('email')
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertNotIn(email, navbar.text)
 
     # @wait
     # def wait_for_row_in_post_table(self, row_text):
@@ -55,20 +68,6 @@ class FunctionalTest(StaticLiveServerTestCase):
     # def get_post_input_box(self):
     #     """Get post title."""
     #     return self.browser.find_element_by_id('id_title')
-
-    # @wait
-    # def wait_to_be_logged_in(self, email):
-    #     """Wait to be logged in."""
-    #     self.browser.find_element_by_link_text('Log out')
-    #     navbar = self.browser.find_element_by_css_selector('.navbar')
-    #     self.assertIn(email, navbar.text)
-
-    # @wait
-    # def wait_to_be_logged_out(self, email):
-    #     """Wait to be logged out."""
-    #     self.browser.find_element_by_name('email')
-    #     navbar = self.browser.find_element_by_css_selector('.navbar')
-    #     self.assertNotIn(email, navbar.text)
 
     # def add_blog_post(self, post_title):
     #     """Add blog post."""

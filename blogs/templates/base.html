@@ -1,0 +1,42 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KeepCoding - Django</title>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
+    <link href="{% static 'reset.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="navbar" role="navigation">
+      <a class="navbar-brand" href="/">KeepCoding Django</a>
+      {% if user.is_authenticated %}
+      <p>Logged in as {{ user.email}}</p>
+      <a href="{% url 'logout' %}">Log out</a>
+      {% else %}
+      <form method="POST" action ="{% url 'send_login_email' %}">
+        <span>Enter email to log in: </span>
+        <input name="email" type="text" />
+        {% csrf_token %}
+      </form>
+      {% endif %}
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level_tag == 'success' %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% else %}
+    <div class="alert alert-warning">{{ message }}</div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <h1>{% block header_text %}{% endblock %}</h1>
+
+  </body>
+  </html>

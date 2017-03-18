@@ -4,8 +4,10 @@ import re
 from django.core import mail
 from selenium.webdriver.common.keys import Keys
 
-
 from .functional_test import FunctionalTest
+
+TEST_EMAIL = 'alice@example.com'
+SUBJECT = 'Your login link for KeepCoding Django'
 
 class AuthenticationTest(FunctionalTest):
     """Test suite: authentication."""
