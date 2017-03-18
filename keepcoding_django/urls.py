@@ -22,6 +22,6 @@ from blogs import views as blogs_views
 
 urlpatterns = [
     url(r'^$', blogs_views.home, name='home'),
-#    url(r'^blogs/', include(blogs_urls)),
+    url(r'^blogs/', include(blogs_urls)),
     url(r'^accounts/', include(accounts_urls)),
 ]
