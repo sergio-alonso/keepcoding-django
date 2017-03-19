@@ -2,6 +2,9 @@
 
 from django.shortcuts import render, redirect
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 from blogs.forms import PostForm, NewPostForm
 
 def home(request):
@@ -11,7 +14,8 @@ def home(request):
 
 def blog(request, user_email):
     """Blog view."""
-    return render(request, 'blog.html')
+    owner = User.objects.get(email=user_email)
+    return render(request, 'blog.html', {'owner': owner})
 
 
 def post_create(request):
@@ -24,6 +28,5 @@ def post_save(request):
     form = NewPostForm(data=request.POST)
     if form.is_valid():
         post = form.save(owner=request.user)
-        #return render(request, 'blog.html')
         return redirect('blog', user_email=request.user.email)
     return render(request, 'post_create.html', {'form': NewPostForm()})

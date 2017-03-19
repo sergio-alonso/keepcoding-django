@@ -10,4 +10,10 @@
 <p class="posts-count">No posts</p>
 {% endif %}
 
+<ul>
+  {% for post in owner.post_set.all %}
+  <li><a href="#">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
+
 {% endblock %}

@@ -2,11 +2,15 @@
 from django.http import HttpRequest
 from django.test import TestCase
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 import unittest
 from unittest.mock import patch, Mock
 
 from blogs.forms import PostForm
 from blogs.views import post_save
+from blogs.models import Post
 
 class HomeViewTest(TestCase):
     """Test suite: home view."""
@@ -22,8 +26,33 @@ class BlogViewTest(TestCase):
 
     def test_uses_blog_template(self):
         """Test case: uses blog template."""
-        response = self.client.get('/blogs/user.name@example.com/')
+        user = User.objects.create(email="user.name@example.com")
+        response = self.client.get('/blogs/%s/' % user.email)
         self.assertTemplateUsed(response, 'blog.html')
+
+    def test_passes_correct_owner_to_template(self):
+        """Test case: passes correct owner to template."""
+        User.objects.create(email='wrong.user@example.com')
+        correct_user = User.objects.create(email='user.name@example.com')
+        response = self.client.get('/blogs/%s/' % correct_user.email)
+        self.assertEqual(response.context['owner'], correct_user)
+
+    def test_displays_only_post_for_that_user(self):
+        """Test case: displays only post for that user."""
+        correct_user = User.objects.create(email='user.name@example.com')
+        Post.objects.create(title='post 0', owner=correct_user)
+        Post.objects.create(title='post 1', owner=correct_user)
+        other_user = User.objects.create(email='wrong.user@example.com')
+        Post.objects.create(title='other user post 0', owner=other_user)
+        Post.objects.create(title='other user post 1', owner=other_user)
+
+        response = self.client.get('/blogs/%s/' % correct_user.email)
+
+        self.assertContains(response, 'post 0')
+        self.assertContains(response, 'post 1')
+        self.assertNotContains(response, 'other user post 0')
+        self.assertNotContains(response, 'other user post 1')
+
 
 class NewPostViewTest(TestCase):
     """Test suite: new post view."""

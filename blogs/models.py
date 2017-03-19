@@ -11,3 +11,6 @@ class Post(models.Model):
     def __str__(self):
         """__str___."""
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('blog', args=[self.owner.email, self.id])
