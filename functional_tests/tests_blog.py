@@ -19,10 +19,9 @@ class BlogTest(FunctionalTest):
         # She notices a "My blog" link, that takes her to the same page! :)
 
         self.browser.find_element_by_link_text('My blog').click()
-
-        blog_url = self.browser.current_url
-        self.assertRegex(blog_url, '/blogs/.+')
-        self.assertIn('alice@example.com', blog_url)
+        self.wait_for(
+            lambda: self.assertIn('/blogs/alice@example.com/', self.browser.current_url)
+        )
 
         # And a message of no post at the bottom.
 
