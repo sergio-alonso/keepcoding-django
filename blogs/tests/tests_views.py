@@ -55,16 +55,16 @@ class NewPostViewUnitTest(unittest.TestCase):
         post_save(self.request)
         mockNewPostForm.assert_called_once_with(data=self.request.POST)
 
-    @patch('blogs.views.render')
-    def test_renders_blog_if_form_is_valid(self, mock_render, mockNewPostForm):
-        """Test case: renders blog if form is valid."""
+    @patch('blogs.views.redirect')
+    def test_redirect_to_blog_if_form_is_valid(self, mock_redirect, mockNewPostForm):
+        """Test case: redirect to blog if form is valid."""
         mock_form = mockNewPostForm.return_value
         mock_form.is_valid.return_value = True
 
         response = post_save(self.request)
 
-        self.assertEqual(response, mock_render.return_value)
-        mock_render.assert_called_once_with(self.request, 'blog.html')
+        self.assertEqual(response, mock_redirect.return_value)
+        mock_redirect.assert_called_once_with('blog', user_email=self.request.user.email)
 
     @patch('blogs.views.render')
     def test_renders_post_create_form_if_form_is_invalid(self, mock_render, mockNewPostForm):

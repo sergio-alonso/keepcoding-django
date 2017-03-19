@@ -24,5 +24,6 @@ def post_save(request):
     form = NewPostForm(data=request.POST)
     if form.is_valid():
         post = form.save(owner=request.user)
-        return render(request, 'blog.html')
+        #return render(request, 'blog.html')
+        return redirect('blog', user_email=request.user.email)
     return render(request, 'post_create.html', {'form': NewPostForm()})
