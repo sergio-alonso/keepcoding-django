@@ -32,11 +32,12 @@ class BlogTest(FunctionalTest):
         self.assertEqual('No posts', posts_count)
 
         # She decides to start a post, just to see.
-        self.browser.find_element_by_link_text('Create a new post')
-        #self.browser.find_element_by_link_text('Create a new post').click
+        self.browser.find_element_by_link_text('Create a new post').click()
 
         # A new page appears, with a form to create a post
-        #redirect('/new-post')
+        self.wait_for(
+            lambda: self.assertIn('/new-post', self.browser.current_url)
+        )
 
         # She sees that her blog is in there, named according to its
         # first blog post
