@@ -6,7 +6,7 @@
 
 {% if user.is_authenticated %}
 <a href="{% url 'blog' user.email %}">My blog</a>
-<a href="{% url 'post' %}">Create a new post</a>
+<a href="{% url 'post_create' %}">Create a new post</a>
 <p class="posts-count">No posts</p>
 {% endif %}
 
