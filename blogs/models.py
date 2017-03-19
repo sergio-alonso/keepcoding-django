@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-
+from django.core.urlresolvers import reverse
 
 class Post(models.Model):
     """Post model."""
@@ -13,4 +13,4 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('blog', args=[self.owner.email, self.id])
+        return reverse('post_detail', args=[self.owner.email, self.id])

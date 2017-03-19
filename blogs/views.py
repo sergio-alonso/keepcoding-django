@@ -30,3 +30,7 @@ def post_save(request):
         post = form.save(owner=request.user)
         return redirect('blog', user_email=request.user.email)
     return render(request, 'post_create.html', {'form': NewPostForm()})
+
+def post_detail(request):
+    """Post detail view."""
+    return render(request, 'home.html')
