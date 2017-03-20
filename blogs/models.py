@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.core.urlresolvers import reverse
 
+import tagulous.models
+
 class Post(models.Model):
     """Post model."""
 
@@ -10,6 +12,7 @@ class Post(models.Model):
     summary = models.TextField(default='', null=True, blank=True)
     description = models.TextField(default='', null=True, blank=True)
     imagen = models.URLField(default='', null=True, blank=True)
+    category = tagulous.models.TagField(force_lowercase=True, blank=True)
     published_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
