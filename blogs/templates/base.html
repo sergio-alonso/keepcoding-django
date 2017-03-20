@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,19 +12,25 @@
 
   <body>
 
-    <div class="navbar" role="navigation">
-      <a class="navbar-brand" href="/">KeepCoding Django</a>
+    <ul class="navbar" role="navigation">
+      <li><a class="navbar-brand" href="/">KeepCoding Django</a></li>
+      <li><a href="{% url 'blogs_list' %}">All blogs</a></li>
       {% if user.is_authenticated %}
-      <p>Logged in as {{ user.email}}</p>
-      <a href="{% url 'logout' %}">Log out</a>
-      {% else %}
+      <li><a href="{% url 'blog' user.email %}">My blog</a></li>
+      <li><p>Logged in as {{ user.email}}</p></li>
+      <li><a href="{% url 'logout' %}">Log out</a></li>
+      <li><a href="{% url 'post_create' %}">Create a new post</a></li>
+
+     {% else %}
+      <li>
       <form method="POST" action ="{% url 'send_login_email' %}">
         <span>Enter email to log in: </span>
         <input name="email" type="text" />
         {% csrf_token %}
       </form>
+      </li>
       {% endif %}
-    </div>
+    </ul>
 
     {% if messages %}
     {% for message in messages %}
@@ -36,10 +42,8 @@
     {% endfor %}
     {% endif %}
 
-    <h1>{% block header_text %}{% endblock %}</h1>
-
-    {% block content %}
-    {% endblock %}
+    {% block header_text %}{% endblock %}
+    {% block content %}{% endblock %}
 
   </body>
   </html>
