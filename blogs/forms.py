@@ -1,7 +1,6 @@
 """Blogs forms."""
 
 from django import forms
-
 from blogs.models import Post
 
 EMPTY_POST_TITLE_ERROR = "You can't have an empty post title"
@@ -15,7 +14,7 @@ class PostForm(forms.models.ModelForm):
         """Meta."""
 
         model = Post
-        fields = ('title','summary','imagen','description','published_date')
+        fields = ('title','summary','imagen','description','category','published_date')
         widgets = {
             'title': forms.fields.TextInput(attrs={
                 'placeholder': 'Enter a post title',
@@ -23,7 +22,8 @@ class PostForm(forms.models.ModelForm):
             }),
         }
         error_messages = {
-            'title': {'required': EMPTY_POST_TITLE_ERROR, 'unique': DUPLICATE_POST_TITLE_ERROR}
+            'title': {'required': EMPTY_POST_TITLE_ERROR,
+                      'unique': DUPLICATE_POST_TITLE_ERROR}
         }
 
 
@@ -33,4 +33,10 @@ class NewPostForm(PostForm):
     def save(self, owner):
         """Save."""
         if owner.is_authenticated:
-            return Post.objects.create(title=self.cleaned_data['title'], owner=owner)
+            return Post.objects.create(title=self.cleaned_data['title'],
+                                       summary=self.cleaned_data['summary'],
+                                       imagen=self.cleaned_data['imagen'],
+                                       description=self.cleaned_data['description'],
+                                       category=self.cleaned_data['category'],
+                                       published_date=self.cleaned_data['published_date'],
+                                       owner=owner)
