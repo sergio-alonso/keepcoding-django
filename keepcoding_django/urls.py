@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^new-post$', blogs_views.post_create, name='post_create'),
     url(r'^blogs/', include(blogs_urls)),
     url(r'^accounts/', include(accounts_urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
