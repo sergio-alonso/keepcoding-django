@@ -1,4 +1,4 @@
-.PHONY: help run test ut ft db db_clean static
+.PHONY: help run test ut ft db db_clean static seed
 
 default: help
 
@@ -11,6 +11,7 @@ help:
 	@echo "bd - Handle databse"
 	@echo "db_clean - Recreate a fresh database"
 	@echo "static - Handle static files"
+	@echo "seed - Populate with dummy data"
 
 run:
 	screen -S server python manage.py runserver
@@ -38,3 +39,6 @@ db_clean:
 
 static:
 	python manage.py collectstatic
+
+seed:
+	python manage.py seed blogs --number=10
