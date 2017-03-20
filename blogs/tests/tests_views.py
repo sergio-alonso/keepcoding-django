@@ -11,7 +11,7 @@ from unittest.mock import patch, Mock
 from django_seed import Seed
 
 from blogs.forms import PostForm
-from blogs.views import post_save
+from blogs.views import post_create, post_save
 from blogs.models import Post
 
 class HomeViewTest(TestCase):
@@ -91,18 +91,24 @@ class BlogViewTest(TestCase):
         assert(all(a.published_date >= b.published_date for a, b in zip(post_list, post_list[1:])))
 
 
-class NewPostViewTest(TestCase):
+@patch('blogs.views.PostForm')
+class NewPostViewTest(unittest.TestCase):
     """Test suite: new post view."""
 
-    def test_uses_post_template(self):
-        """Test case: uses post template."""
-        response = self.client.get('/new-post')
-        self.assertTemplateUsed(response, 'post_create.html')
+    def setUp(self):
+        """"Setup."""
+        self.request = HttpRequest()
+        self.request.user = Mock()
+        self.request.user.email = "user.name@example.com"
+        self.request.user.is_authenticated = True
 
-    def test_uses_post_form(self):
-        """Test case: uses post form."""
-        response = self.client.get('/new-post')
-        self.assertIsInstance(response.context['form'], PostForm)
+    @patch('blogs.views.render')
+    def test_uses_post_template_and_form(self, mock_render, mockPostForm):
+        """Test case: uses post template."""
+        mock_form = mockPostForm.return_value
+        response = post_create(self.request)
+        self.assertEqual(response, mock_render.return_value)
+        mock_render.assert_called_once_with(self.request, 'post_create.html', {'form': mock_form})
 
 
 @patch('blogs.views.NewPostForm')
