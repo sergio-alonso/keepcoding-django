@@ -9,7 +9,8 @@
 {% endif %}
 
 <form method="POST" action="{% url 'post_save' %}">
-  {{ form.title }}
+  {{ form.as_ul }}
+  <input type="submit" value="Submit" />
   {% csrf_token %}
   {% if form.errors %}
   <div class="has-error">
