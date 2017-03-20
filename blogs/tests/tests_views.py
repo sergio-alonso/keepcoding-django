@@ -8,6 +8,8 @@ User = get_user_model()
 import unittest
 from unittest.mock import patch, Mock
 
+from django_seed import Seed
+
 from blogs.forms import PostForm
 from blogs.views import post_save
 from blogs.models import Post
@@ -20,6 +22,27 @@ class HomeViewTest(TestCase):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
+    def test_displays_last_post(self):
+        """Test case: displays last posts."""
+
+        seeder = Seed.seeder()
+        seeder.add_entity(User, 10)
+        seeder.add_entity(Post, 10)
+        seeder.execute()
+
+        response = self.client.get('/')
+        post_list = response.context["object_list"]
+
+        # Test if posts are sorted by date, from newest to oldest
+        assert(all(a.published_date >= b.published_date for a, b in zip(post_list, post_list[1:])))
+
+    @unittest.skip
+    def test_display_only_ten_posts(self):
+        self.fail("Finish the test!")
+
+    @unittest.skip
+    def test_pagination(self):
+        self.fail("Finish the test!")
 
 class BlogViewTest(TestCase):
     """Test suite: blog view."""

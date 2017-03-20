@@ -1,5 +1,7 @@
 """Blog forms tests."""
 from django.test import TestCase
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 import unittest
 from unittest.mock import patch, Mock
@@ -25,8 +27,9 @@ class PostFormTest(TestCase):
         self.assertEqual(form.errors['title'], [EMPTY_POST_TITLE_ERROR])
 
     def test_form_validation_for_duplicate_posts(self):
-        """Test case: form validation forn duplicate items."""
-        Post.objects.create(title='no twins!')
+        """Test case: form validation for duplicate items."""
+        user = User.objects.create(email="user.name@example.com")
+        Post.objects.create(owner=user, title='no twins!')
         form = PostForm(data={'title': 'no twins!'})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['title'], [DUPLICATE_POST_TITLE_ERROR])

@@ -15,14 +15,16 @@ class PostModelTest(TestCase):
 
     def test_cannot_save_empty_list_posts(self):
         """Test case: cannot save empty list post."""
-        post = Post(title='')
+        user = User.objects.create(email="user.name@example.com")
+        post = Post(owner=user, title='')
         with self.assertRaises(ValidationError):
             post.save()
             post.full_clean()
 
     def test_duplicate_posts_are_invalid(self):
         """Test case: duplicate post are invalid."""
-        Post.objects.create(title='post title')
+        user = User.objects.create(email="user.name@example.com")
+        Post.objects.create(owner=user, title='post title')
         with self.assertRaises(ValidationError):
             post = Post(title='post title')
             post.full_clean()
