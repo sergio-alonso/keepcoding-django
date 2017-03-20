@@ -1,12 +1,8 @@
 {% extends 'base.html' %}
 
-{% block header_text %}KeepCoding Django Blog{% endblock %}
+{% block header_text %}<h1>Post Detail</h1>{% endblock %}
 
 {% block content %}
-
-{% if user.is_authenticated %}
-<a href="{% url 'blog' user.email %}">My blog</a>
-{% endif %}
 
 <h2 class="post-title">{{ post.title }}</h2>
 
@@ -16,6 +12,10 @@
 
 <p>{{ post.description }}</p>
 
-<p>Published: <time datetime="{{ post.publised_date }}">{{ post.published_date }}</time></p>
+<p>{{ post.category }}</p>
+
+<p>{{ tag.name }}</p>
+
+<p>Published: <time datetime="{{ post.published_date }}">{{ post.published_date }}</time></p>
 
 {% endblock %}
