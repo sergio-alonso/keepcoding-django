@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header_text %}KeepCoding Django Blog{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<a href="{% url 'blog' user.email %}">My blog</a>
+{% endif %}
+
+<form method="POST" action="{% url 'post_save' %}">
+  {{ form.title }}
+  {% csrf_token %}
+  {% if form.errors %}
+  <div class="has-error">
+    <span class="help-block">{{ form.title.errors }}</span>
+  </div>
+  {% endif %}
+</form>
+
+{% endblock %}

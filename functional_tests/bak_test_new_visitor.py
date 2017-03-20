@@ -10,21 +10,21 @@ class NewVisitorTest(FunctionalTest):
 
     def test_can_start_a_blog_for_one_user(self):
         """Test Case: list last post on home page."""
-        # Alice has heard about a cool new online app.
-        # She goes to check out its homepage.
-        self.browser.get(self.live_server_url)
+#        # Alice has heard about a cool new online app.
+#        # She goes to check out its homepage.
+#        self.browser.get(self.live_server_url)
 
-        # She notices the page title and header mention resource lists
-        self.assertIn('KeepCoding - Django', self.browser.title)
-        header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Start a new blog', header_text)
+#        # She notices the page title and header mention resource lists
+#        self.assertIn('KeepCoding - Django', self.browser.title)
+#        header_text = self.browser.find_element_by_tag_name('h1').text
+#        self.assertIn('Start a new blog', header_text)
 
-        # She is invited to enter a post title straight away
-        inputbox = self.get_post_input_box()
-        self.assertEqual(
-            inputbox.get_attribute('placeholder'),
-            'Enter a post title'
-        )
+#        # She is invited to enter a post title straight away
+#        inputbox = self.get_post_input_box()
+#        self.assertEqual(
+#            inputbox.get_attribute('placeholder'),
+#            'Enter a post title'
+#        )
 
         # When she hits enter, the page updates, and now the page lists
         # "1: Buy peacock feathers" as an item in a to-do list table

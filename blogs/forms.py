@@ -1,9 +1,11 @@
-"""Django blog forms."""
+"""Blogs forms."""
+
 from django import forms
 
-from blog.models import Post, Blog
+from blogs.models import Post
 
 EMPTY_POST_TITLE_ERROR = "You can't have an empty post title"
+DUPLICATE_POST_TITLE_ERROR = 'A post with same title already exists.'
 
 
 class PostForm(forms.models.ModelForm):
@@ -21,16 +23,14 @@ class PostForm(forms.models.ModelForm):
             }),
         }
         error_messages = {
-            'title': {'required': EMPTY_POST_TITLE_ERROR}
+            'title': {'required': EMPTY_POST_TITLE_ERROR, 'unique': DUPLICATE_POST_TITLE_ERROR}
         }
 
 
-class NewBlogForm(PostForm):
-    """New blog form."""
+class NewPostForm(PostForm):
+    """New post form."""
 
     def save(self, owner):
         """Save."""
         if owner.is_authenticated:
-            return Blog.create_new(first_post_title=self.cleaned_data['title'], owner=owner)
-        else:
-            return Blog.create_new(first_post_title=self.cleaned_data['title'])
+            return Post.objects.create(title=self.cleaned_data['title'], owner=owner)

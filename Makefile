@@ -21,7 +21,7 @@ test: ut ft
 
 ut:
 	@clear
-	python manage.py test blog
+	python manage.py test blogs
 	python manage.py test accounts
 
 ft:

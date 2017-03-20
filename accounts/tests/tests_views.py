@@ -65,11 +65,6 @@ class SendLoginEmailViewTest(TestCase):
 class LoginViewTest(TestCase):
     """Test suite: login view."""
 
-    def test_redirects_to_home_page(self, mock_auth):
-        """Test case: redirects to home page."""
-        response = self.client.get('/accounts/login?token=abc123')
-        self.assertRedirects(response, '/')
-
     def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
         """Test case: calls authenticate with uid from get request."""
         self.client.get('/accounts/login?token=abc123')
@@ -89,5 +84,14 @@ class LoginViewTest(TestCase):
     def test_does_not_login_if_user_is_not_authenticated(self, mock_auth):
         """Test case: does not login if user is not authenticated."""
         mock_auth.authenticate.return_value = None
-        self.client.get('/accounts/login?token=abc123')
+        response = self.client.get('/accounts/login?token=abc123',follow=True)
         self.assertEqual(mock_auth.login.called, False)
+
+        self.assertRedirects(response, '/')
+
+        message = list(response.context['messages'])[0]
+        self.assertEqual(
+            message.message,
+            "Something was wrong. Try it again."
+        )
+        self.assertEqual(message.tags, "warning")

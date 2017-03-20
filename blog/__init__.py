@@ -1,1 +1,0 @@
-"""Django blog app."""
