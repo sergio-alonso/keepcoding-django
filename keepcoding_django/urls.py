@@ -22,7 +22,7 @@ from blogs import views as blogs_views
 
 urlpatterns = [
     url(r'^$', blogs_views.Home.as_view(), name='home'),
-    url(r'^new-post$', blogs_views.post_create , name='post_create'),
+    url(r'^new-post$', blogs_views.post_create, name='post_create'),
     url(r'^blogs/', include(blogs_urls)),
     url(r'^accounts/', include(accounts_urls)),
 ]
