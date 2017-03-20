@@ -1,7 +1,7 @@
 """Blog views."""
 
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -17,7 +17,6 @@ def blog(request, user_email):
     """Blog view."""
     owner = User.objects.get(email=user_email)
     return render(request, 'blog.html', {'owner': owner})
-
 
 def post_create(request):
     """Post create view."""
@@ -35,9 +34,9 @@ def post_save(request):
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = "post_detail.html"
+    template_name = 'post_detail.html'
 
-#def post_detail(request, user_email, post_id):
-#    """Post detail view."""
-#    owner = User.objects.get(email, user_email)
-#    return render(request, 'post_detail.html')
+
+class BlogsListView(ListView):
+    model = User
+    template_name = 'blogs_list.html'

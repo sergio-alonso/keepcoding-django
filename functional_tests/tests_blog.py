@@ -1,11 +1,67 @@
 """Functional tests for a blog."""
 
+from django_seed import Seed
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 from .functional_test import FunctionalTest
 
 from selenium.webdriver.common.keys import Keys
 
+ALICE_EMAIL = 'alice@example.com'
+BOB_EMAIL = 'bob@example.com'
+
+
 class BlogTest(FunctionalTest):
     """Test suite: blog test."""
+
+    def test_display_a_list_of_existing_blogs(self):
+        """Test case: display a list of existing blogs."""
+
+        # Alice arrives to blog page
+        self.browser.get(self.live_server_url + '/blogs/')
+
+        # She can see a list of active blogs, none at this moment
+        # and decide to create one for herself
+        self.login(user_email=ALICE_EMAIL)
+        self.wait_to_be_logged_in(email=ALICE_EMAIL)
+        self.browser.find_element_by_link_text('Log out').click()
+        self.wait_to_be_logged_out(email=ALICE_EMAIL)
+
+        self.restart_browser()
+
+        # Bob arrives to blog page
+        self.browser.get(self.live_server_url + '/blogs/')
+
+        # He can see Alice's blog
+        self.wait_for(
+            lambda: self.browser.find_element_by_link_text(ALICE_EMAIL)
+        )
+
+        # He decide to create one for himself
+        self.login(user_email=BOB_EMAIL)
+        self.wait_to_be_logged_in(email=BOB_EMAIL)
+        self.browser.find_element_by_link_text('Log out').click()
+        self.wait_to_be_logged_out(email=BOB_EMAIL)
+
+        # Now two blogs are listed
+        self.browser.get(self.live_server_url + '/blogs/')
+        self.wait_for(
+            lambda: self.browser.find_element_by_link_text(BOB_EMAIL)
+        )
+        self.wait_for(
+            lambda: self.browser.find_element_by_link_text(ALICE_EMAIL)
+        )
+
+        # Eight more people arrive and everyone creates a blog
+        seeder = Seed.seeder()
+        seeder.add_entity(User, 8)
+        seeder.execute()
+
+        self.browser.get(self.live_server_url + '/blogs/')
+        self.wait_for(
+            lambda: self.assertEqual(10, len(self.browser.find_elements_by_class_name('blog-link')))
+        )
 
     def test_logged_in_users_blog_are_saved_as_my_blog(self):
         """Test case: logged in users blog are saved as my blog."""
