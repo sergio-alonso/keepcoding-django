@@ -10,7 +10,7 @@ from blogs.models import Post
 
 class Home(ListView):
     """Home view."""
-    model = Post
+    queryset = Post.objects.order_by('-published_date')
     template_name = "home.html"
 
 

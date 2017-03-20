@@ -7,6 +7,7 @@ class Post(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     title = models.TextField(default='', unique=True)
+    published_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         """__str___."""
