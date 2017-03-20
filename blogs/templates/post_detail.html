@@ -10,4 +10,12 @@
 
 <h2 class="post-title">{{ post.title }}</h2>
 
+<p>{{ post.summary }}</p>
+
+<img src="{{ post.imagen }}" />
+
+<p>{{ post.description }}</p>
+
+<p>Published: <time datetime="{{ post.publised_date }}">{{ post.published_date }}</time></p>
+
 {% endblock %}
