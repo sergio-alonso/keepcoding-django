@@ -8,9 +8,10 @@ User = get_user_model()
 from blogs.forms import PostForm, NewPostForm
 from blogs.models import Post
 
-def home(request):
+class Home(ListView):
     """Home view."""
-    return render(request, 'home.html')
+    model = Post
+    template_name = "home.html"
 
 
 def blog(request, user_email):

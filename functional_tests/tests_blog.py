@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from .functional_test import FunctionalTest
+from blogs.models import Post
 
 from selenium.webdriver.common.keys import Keys
 
@@ -14,6 +15,21 @@ BOB_EMAIL = 'bob@example.com'
 
 class BlogTest(FunctionalTest):
     """Test suite: blog test."""
+
+    def test_display_a_list_of_last_posts(self):
+        """Test case: display a list of last posts."""
+
+        seeder = Seed.seeder()
+        seeder.add_entity(User, 10)
+        seeder.add_entity(Post, 20)
+        seeder.execute()
+
+        self.browser.get(self.live_server_url)
+
+        self.wait_for(
+            lambda: self.assertEqual(20, len(self.browser.find_elements_by_class_name('post-link')))
+        )
+
 
     def test_display_a_list_of_existing_blogs(self):
         """Test case: display a list of existing blogs."""
@@ -122,7 +138,7 @@ class BlogTest(FunctionalTest):
 
         self.browser.find_element_by_link_text('My first post').click()
         self.wait_for(
-            lambda: self.assertIn('/blogs/alice@example.com/1/', self.browser.current_url)
+            lambda: self.assertIn('/blogs/alice@example.com/21/', self.browser.current_url)
         )
 
         # She logs out. The "My blog" option disappears
