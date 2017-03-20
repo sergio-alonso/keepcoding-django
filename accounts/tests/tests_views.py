@@ -56,7 +56,7 @@ class SendLoginEmailViewTest(TestCase):
         })
 
         token = Token.objects.first()
-        expected_url = 'http://testserver/accounts/login?token=%s' % token.uid
+        expected_url = 'http://testserver/accounts/login/?token=%s' % token.uid
         (subject, body, from_email, to_list), kwargs = mock_send_mail.call_args
         self.assertIn(expected_url, body)
 
@@ -67,7 +67,7 @@ class LoginViewTest(TestCase):
 
     def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
         """Test case: calls authenticate with uid from get request."""
-        self.client.get('/accounts/login?token=abc123')
+        self.client.get('/accounts/login/?token=abc123')
         self.assertEqual(
             mock_auth.authenticate.call_args,
             call(uid='abc123')
@@ -75,7 +75,7 @@ class LoginViewTest(TestCase):
 
     def test_calls_auth_login_with_user_if_there_is_one(self, mock_auth):
         """Test case: calls auth login with user if there is one."""
-        response = self.client.get('/accounts/login?token=abc123')
+        response = self.client.get('/accounts/login/?token=abc123')
         self.assertEqual(
             mock_auth.login.call_args,
             call(response.wsgi_request, mock_auth.authenticate.return_value)
@@ -84,7 +84,7 @@ class LoginViewTest(TestCase):
     def test_does_not_login_if_user_is_not_authenticated(self, mock_auth):
         """Test case: does not login if user is not authenticated."""
         mock_auth.authenticate.return_value = None
-        response = self.client.get('/accounts/login?token=abc123',follow=True)
+        response = self.client.get('/accounts/login/?token=abc123',follow=True)
         self.assertEqual(mock_auth.login.called, False)
 
         self.assertRedirects(response, '/')

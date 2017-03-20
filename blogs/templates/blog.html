@@ -1,19 +1,17 @@
 {% extends 'base.html' %}
 
-{% block header_text %}KeepCoding Django Blog{% endblock %}
+{% block header_text %}<h1>Posts List</h1>{% endblock %}
 
 {% block content %}
 
-{% if user.is_authenticated %}
-<a href="{% url 'blog' user.email %}">My blog</a>
-<a href="{% url 'post_create' %}">Create a new post</a>
-<p class="posts-count">No posts</p>
-{% endif %}
-
+{% if posts %}
 <ul>
   {% for post in posts %}
   <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
   {% endfor %}
 </ul>
+{% else %}
+<p class="posts-count">No posts</p>
+{% endif %}
 
 {% endblock %}

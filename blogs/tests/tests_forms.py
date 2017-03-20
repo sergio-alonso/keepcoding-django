@@ -55,7 +55,13 @@ class NewPostFormTest(unittest.TestCase):
         form.is_valid()
         form.save(owner=user)
         mock_Post_objects_create.assert_called_once_with(
-            title='new post title', owner=user
+            summary='',
+            title='new post title',
+            owner=user,
+            description='',
+            category=[],
+            imagen='',
+            published_date=None
         )
 
     @patch('blogs.forms.Post.objects.create')
