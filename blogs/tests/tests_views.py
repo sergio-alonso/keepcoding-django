@@ -76,6 +76,23 @@ class BlogViewTest(TestCase):
         self.assertNotContains(response, 'other user post 0')
         self.assertNotContains(response, 'other user post 1')
 
+    def test_displays_posts_sorted_by_publication_date(self):
+        """Test case: displays last posts."""
+
+        #user = User.objects.create(email='user.name@example.com')
+
+        seeder = Seed.seeder()
+        seeder.add_entity(User, 1)
+        seeder.add_entity(Post, 10)
+        seeder.execute()
+
+        response = self.client.get('/blogs/%s/' % User.objects.all()[:1].get().email)
+        print(User.objects.all()[:1].get().email)
+        post_list = response.context["posts"]
+
+        # Test if posts are sorted by date, from newest to oldest
+        assert(all(a.published_date >= b.published_date for a, b in zip(post_list, post_list[1:])))
+
 
 class NewPostViewTest(TestCase):
     """Test suite: new post view."""

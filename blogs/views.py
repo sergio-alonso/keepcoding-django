@@ -17,7 +17,9 @@ class Home(ListView):
 def blog(request, user_email):
     """Blog view."""
     owner = User.objects.get(email=user_email)
-    return render(request, 'blog.html', {'owner': owner})
+    posts = Post.objects.filter(owner=owner).select_related().order_by('-published_date')
+
+    return render(request, 'blog.html', {'owner': owner, 'posts':posts})
 
 def post_create(request):
     """Post create view."""
