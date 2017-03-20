@@ -1,5 +1,5 @@
 """Blog views."""
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 from django.contrib.auth import get_user_model
@@ -21,6 +21,7 @@ def blog(request, user_email):
 
     return render(request, 'blog.html', {'owner': owner, 'posts':posts})
 
+@login_required
 def post_create(request):
     """Post create view."""
     return render(request, 'post_create.html', {'form': PostForm()})
