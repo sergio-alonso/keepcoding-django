@@ -1,5 +1,5 @@
 """Django blogs urls."""
-from django.conf.urls import url
+from django.conf.urls import include, url
 
 from blogs import views
 

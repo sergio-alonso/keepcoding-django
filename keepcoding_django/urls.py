@@ -19,6 +19,7 @@ from accounts import urls as accounts_urls
 from blogs import urls as blogs_urls
 
 from blogs import views as blogs_views
+from blogs import api
 
 urlpatterns = [
     url(r'^$', blogs_views.Home.as_view(), name='home'),
@@ -26,4 +27,5 @@ urlpatterns = [
     url(r'^blogs/', include(blogs_urls)),
     url(r'^accounts/', include(accounts_urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/v1/', include(api.router.urls, namespace='api')),
 ]
