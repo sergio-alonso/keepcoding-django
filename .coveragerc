@@ -1,0 +1,14 @@
+[run]
+source = .
+branch = False
+timid = True
+[report]
+show_missing = False
+include = *.py
+omit =
+  manage.py
+  *__init__*
+  *_tests/*
+  */tests/*
+  */site-packages/*
+  */migrations/*
