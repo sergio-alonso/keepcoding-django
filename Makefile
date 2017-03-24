@@ -11,14 +11,19 @@ help:
 	@echo "bd - Handle databse"
 	@echo "db_clean - Recreate a fresh database"
 	@echo "static - Handle static files"
-	@echo "seed - Populate with dummy data"
+	@echo "seeEd - Populate with dummy data"
+	@echo "coverage - Code coverage"
 
 run:
 	screen -S server python manage.py runserver
     # C-a a d
     # screen -rd server
 
-test: ut ft
+test: coverage
+
+coverage:
+	coverage run --source='.' manage.py test --parallel -v0
+	coverage report
 
 ut:
 	@clear
