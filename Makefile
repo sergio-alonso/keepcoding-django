@@ -1,4 +1,4 @@
-.PHONY: help run test ut ft db db_clean static seed
+.PHONY: help run test ut ft db db_clean static seed coverage
 
 default: help
 
@@ -19,10 +19,11 @@ run:
     # C-a a d
     # screen -rd server
 
-test: coverage
+test:
+	python manage.py test --parallel -v0
 
 coverage:
-	coverage run --source='.' manage.py test --parallel -v0
+	coverage run --source='.' manage.py test functional_tests blogs accounts blogs -v0
 	coverage report
 
 ut:
