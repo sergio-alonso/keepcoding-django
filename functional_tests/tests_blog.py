@@ -1,6 +1,5 @@
 """Functional tests for a blog."""
 
-from django_seed import Seed
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -13,23 +12,7 @@ ALICE_EMAIL = 'alice@example.com'
 BOB_EMAIL = 'bob@example.com'
 
 
-class BlogTest(FunctionalTest):
-    """Test suite: blog test."""
-
-    def test_display_a_list_of_last_posts(self):
-        """Test case: display a list of last posts."""
-
-        seeder = Seed.seeder()
-        seeder.add_entity(User, 10)
-        seeder.add_entity(Post, 20)
-        seeder.execute()
-
-        self.browser.get(self.live_server_url)
-
-        self.wait_for(
-            lambda: self.assertEqual(20, len(self.browser.find_elements_by_class_name('post-link')))
-        )
-
+class BlogReadTest(FunctionalTest):
 
     def test_display_a_list_of_existing_blogs(self):
         """Test case: display a list of existing blogs."""
@@ -69,15 +52,7 @@ class BlogTest(FunctionalTest):
             lambda: self.browser.find_element_by_link_text(ALICE_EMAIL)
         )
 
-        # Eight more people arrive and everyone creates a blog
-        seeder = Seed.seeder()
-        seeder.add_entity(User, 8)
-        seeder.execute()
-
-        self.browser.get(self.live_server_url + '/blogs/')
-        self.wait_for(
-            lambda: self.assertEqual(10, len(self.browser.find_elements_by_class_name('blog-link')))
-        )
+class BlogCreateTest(FunctionalTest):
 
     def test_logged_in_users_blog_are_saved_as_my_blog(self):
         """Test case: logged in users blog are saved as my blog."""
@@ -106,6 +81,9 @@ class BlogTest(FunctionalTest):
 
         # She decides to start a post, just to see.
 
+        self.wait_for(
+            lambda: self.browser.find_element_by_link_text('Create a new post')
+        )
         self.browser.find_element_by_link_text('Create a new post').click()
 
         # A new page appears, with a form to create a post
@@ -138,7 +116,7 @@ class BlogTest(FunctionalTest):
 
         self.browser.find_element_by_link_text('My first post').click()
         self.wait_for(
-            lambda: self.assertIn('/blogs/alice@example.com/post/21/', self.browser.current_url)
+            lambda: self.assertIn('/blogs/alice@example.com/post/1/', self.browser.current_url)
         )
 
         # She logs out. The "My blog" option disappears
