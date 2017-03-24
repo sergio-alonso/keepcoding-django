@@ -16,7 +16,7 @@ class UserModelTest(TestCase):
 
     def test_user_is_valid_with_email_only(self):
         """Test case: user is valid with email."""
-        user = User(email='user.name@example.com')
+        user = User(email='user.name@example.com', password="supersecret")
         user.full_clean()  # should not raise
 
     def test_no_problem_with_auth_login(self):
