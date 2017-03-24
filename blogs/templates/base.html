@@ -16,6 +16,9 @@
       <li><a class="navbar-brand" href="/">KeepCoding Django</a></li>
       <li><a href="{% url 'blogs_list' %}">All blogs</a></li>
       {% if user.is_authenticated %}
+      {% if user.is_admin %}
+      <li><a href="{% url 'admin:index' %}">Admin site</a></li>
+      {% endif %}
       <li><a href="{% url 'blog' user.email %}">My blog</a></li>
       <li><p>Logged in as {{ user.email}}</p></li>
       <li><a href="{% url 'logout' %}">Log out</a></li>
