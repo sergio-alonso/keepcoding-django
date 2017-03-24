@@ -138,7 +138,7 @@ class BlogTest(FunctionalTest):
 
         self.browser.find_element_by_link_text('My first post').click()
         self.wait_for(
-            lambda: self.assertIn('/blogs/alice@example.com/21/', self.browser.current_url)
+            lambda: self.assertIn('/blogs/alice@example.com/post/21/', self.browser.current_url)
         )
 
         # She logs out. The "My blog" option disappears
