@@ -126,6 +126,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../keepcoding-django-static'))
 
+# Upload Media files
+MEDIA_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../keepcoding-django-media'))
+
 # Email
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
