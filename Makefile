@@ -23,13 +23,14 @@ test:
 	python manage.py test --parallel -v0
 
 coverage:
-	coverage run --source='.' manage.py test functional_tests blogs accounts blogs -v0
+	coverage run --source='.' manage.py test -v0
 	coverage report
 
 ut:
 	@clear
-	python manage.py test blogs
-	python manage.py test accounts
+	python manage.py test blogs --parallel -v0
+	python manage.py test accounts --parallel -v0
+	python manage.py test uploader --parallel -v0
 
 ft:
 	@clear
