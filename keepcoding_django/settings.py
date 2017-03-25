@@ -164,5 +164,7 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
-    )
+    ),
+    # The default format used to make test requests
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
