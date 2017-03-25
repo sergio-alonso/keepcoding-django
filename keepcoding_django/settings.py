@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tagulous',
     'blogs',
     'accounts',
+    'uploader'
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../keepcoding-django-static'))
 
+# Upload Media files
+MEDIA_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../keepcoding-django-media'))
+
 # Email
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -160,5 +164,7 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
-    )
+    ),
+    # The default format used to make test requests
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }

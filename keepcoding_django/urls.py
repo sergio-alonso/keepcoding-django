@@ -22,6 +22,8 @@ from blogs import urls as blogs_urls
 from blogs import views as blogs_views
 from blogs import api
 
+from uploader import api_urls as uploader_api
+
 urlpatterns = [
     url(r'^$', blogs_views.Home.as_view(), name='home'),
     url(r'^admin/', admin.site.urls),
@@ -30,4 +32,5 @@ urlpatterns = [
     url(r'^accounts/', include(accounts_urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/v1/', include(api.router.urls, namespace='api')),
+    url(r'^api/v1/', include(uploader_api.router.urls, namespace='api')),
 ]
