@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils.http import urlencode
 from django.utils.timezone import now
 
-from blogs.models import Post
+from blogs.models import Post, Category
 from blogs.forms import EMPTY_POST_TITLE_ERROR, DUPLICATE_POST_TITLE_ERROR
 
 class BlogAPITest(TestCase):
@@ -60,17 +60,14 @@ class PostAPITest(TestCase):
         self.user = User.objects.create(email="user.name@example.com", password='singlesecret', is_admin=False)
         self.user_header = {'HTTP_AUTHORIZATION': 'Basic {}'.format('dXNlci5uYW1lQGV4YW1wbGUuY29tOnNpbmdsZXNlY3JldA==')}
 
-        # Post.objects.create(title='Post 5', summary='Post A', owner=self.user, published=True)
-        # Post.objects.create(title='Post 4', summary='Post B', owner=self.user, published=False)
-        # Post.objects.create(title='Post 3', summary='Post C', owner=self.user, published=True)
-        # Post.objects.create(title='Post 2', summary='Post D', owner=self.user, published=False)
-        # Post.objects.create(title='Post 1', summary='Post E', owner=self.user, published=True)
-
-        Post.objects.create(title='Post 5', summary='Post A', owner=self.user, published_date='2017-01-01T00:00:00.000000Z')
+        post1 = Post.objects.create(title='Post 5', summary='Post A', owner=self.user, published_date='2017-01-01T00:00:00.000000Z')
         Post.objects.create(title='Post 4', summary='Post B', owner=self.user)
         Post.objects.create(title='Post 3', summary='Post C', owner=self.user, published_date='2017-01-02T00:00:00.000000Z')
         Post.objects.create(title='Post 2', summary='Post D', owner=self.user)
         Post.objects.create(title='Post 1', summary='Post E', owner=self.user, published_date='2017-01-03T00:00:00.000000Z')
+
+        category1 = Category.objects.create(name='category-1')
+        post1.category.add(category1)
 
         self.other_user = User.objects.create(email="bad.user@dummy.com", password='badsecret')
         self.other_header = {'HTTP_AUTHORIZATION': 'Basic {}'.format('YmFkLnVzZXJAZHVtbXkuY29tOmJhZHNlY3JldA==')}
@@ -132,6 +129,16 @@ class PostAPITest(TestCase):
             [{'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'}]
         )
 
+    def test_user_can_search_by_category(self):
+        url = reverse('api:post-list', args=[self.user.email])
+        data = {'category':'category-1'}
+        response = self.client.get(url, data, **self.user_header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            json.loads(response.content.decode('utf8')),
+            [{'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+        )
+
     def test_owner_post_are_sorted_by_inverse_published_date(self):
         # First published is last displayed
         url = reverse('api:post-list', args=[self.user.email])
@@ -191,12 +198,12 @@ class PostAPITest(TestCase):
         # self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.assertRegex(
         #     json.loads(response.content.decode('utf8')),
-        #     [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-        #      {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-        #      {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-        #      {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-        #      {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'},
-        #      {'imagen': '', 'published_date': '(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z', 'summary': '', 'title': 'new post'}]
+        #     [{'category': [], 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+        #      {'category': [], 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+        #      {'category': [], 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+        #      {'category': [], 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+        #      {'category': ['category-1'], 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'},
+        #      {'category': [], 'imagen': '', 'published_date': '(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z', 'summary': '', 'title': 'new post'}]
         # )
 
     def test_other_user_can_not_create_a_new_post_in_others_blog(self):
