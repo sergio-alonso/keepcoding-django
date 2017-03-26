@@ -36,16 +36,18 @@ ft:
 	@clear
 	python manage.py test functional_tests
 
-db:
+db:	db_clean db_create db_seed
+
+db_create:
 	python manage.py makemigrations
 	python manage.py migrate
 
 db_clean:
-	rm db.sqlite3
-	python manage.py migrate --noinput
+	rm -fr db.sqlite3
+
+db_seed:
+	python manage.py seed blogs --number=10
+
 
 static:
 	python manage.py collectstatic
-
-seed:
-	python manage.py seed blogs --number=10
