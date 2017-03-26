@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch, Mock
 
 from blogs.forms import PostForm, NewPostForm,  EMPTY_POST_TITLE_ERROR, DUPLICATE_POST_TITLE_ERROR
-from blogs.models import Post
+from blogs.models import Post, Category
 
 
 class PostFormTest(TestCase):
@@ -59,7 +59,6 @@ class NewPostFormTest(unittest.TestCase):
             title='new post title',
             owner=user,
             description='',
-            category=[],
             imagen='',
             published_date=None
         )
