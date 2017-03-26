@@ -27,3 +27,6 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[self.owner.email, self.id])
+
+    def get_author(self):
+        return self.owner

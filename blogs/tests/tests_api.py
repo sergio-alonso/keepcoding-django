@@ -42,13 +42,6 @@ class BlogAPITest(TestCase):
             json.loads(response.content.decode('utf8')),
             [{'blog': '/api/v1/blogs/user.name.2@example.com/'}]
         )
-        self.assertNotIn(
-            json.loads(response.content.decode('utf8')),
-            [{'blog': '/api/v1/blogs/user.name.1@example.com/'},
-             {'blog': '/api/v1/blogs/user.name.2@example.com/'},
-             {'blog': '/api/v1/blogs/user.name.3@example.com/'},
-             {'blog': '/api/v1/blogs/user.name.4@example.com/'}]
-        )
 
 
 class PostAPITest(TestCase):
@@ -80,9 +73,9 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_other_user_can_only_read_published_posts(self):
@@ -91,9 +84,9 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_owner_can_read_all_posts(self):
@@ -102,11 +95,11 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_owner_can_search_by_title(self):
@@ -116,7 +109,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'}]
         )
 
     def test_owner_can_search_by_summary(self):
@@ -126,7 +119,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'}]
         )
 
     def test_user_can_search_by_category(self):
@@ -136,7 +129,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_owner_post_are_sorted_by_inverse_published_date(self):
@@ -146,11 +139,11 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_owner_can_sort_all_post_by_title(self):
@@ -160,11 +153,11 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_owner_can_sort_all_post_by_published_date(self):
@@ -174,19 +167,20 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'}]
         )
 
     def test_user_can_create_a_new_post(self):
         url = reverse('api:post-list', args=[self.user.email])
         response = self.client.post(url, data=urlencode({'title':'new post'}), content_type='application/x-www-form-urlencoded', **self.user_header)
+        print(response.content)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        self.assertRegex(
+        self.assertEqual(
             json.loads(response.content.decode('utf8'))['title'], 'new post'
         )
 
@@ -221,11 +215,11 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_anonymous_user_can_not_create_a_new_post(self):
@@ -243,11 +237,11 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_user_can_read_all_its_own_post(self):
@@ -256,7 +250,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'}
+            {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'}
         )
 
     def test_admin_can_read_any_post(self):
@@ -265,7 +259,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'}
+            {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'}
         )
 
     def test_other_user_can_read_any_published_post(self):
@@ -274,7 +268,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}
+            {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}
         )
 
     def test_other_user_can_not_read_others_private_post(self):
@@ -292,7 +286,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}
+            {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}
         )
 
     def test_anonymous_can_not_read_private_post(self):
@@ -310,7 +304,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            {'imagen': '', 'published_date': None, 'summary': 'something', 'title': 'Post 4'}
+            {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'something', 'title': 'Post 4'}
         )
 
     def test_admin_can_update_any_post_details(self):
@@ -319,7 +313,7 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            {'imagen': '', 'published_date': None, 'summary': 'another thing', 'title': 'Post 4'}
+            {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'another thing', 'title': 'Post 4'}
         )
 
     def test_other_user_can_not_update_any_other_post(self):
@@ -351,10 +345,10 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_admin_can_delete_any_post(self):
@@ -368,10 +362,10 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_other_user_can_not_delete_any_others_post(self):
@@ -389,11 +383,11 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )
 
     def test_anonymous_can_not_delete_any_post(self):
@@ -411,9 +405,9 @@ class PostAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
-             {'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
-             {'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
-             {'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
+            [{'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-03T00:00:00Z', 'summary': 'Post E', 'title': 'Post 1'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post D', 'title': 'Post 2'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-02T00:00:00Z', 'summary': 'Post C', 'title': 'Post 3'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': None, 'summary': 'Post B', 'title': 'Post 4'},
+             {'author': 'user.name@example.com', 'imagen': '', 'published_date': '2017-01-01T00:00:00Z', 'summary': 'Post A', 'title': 'Post 5'}]
         )

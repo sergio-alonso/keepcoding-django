@@ -65,10 +65,14 @@ class PostSerializer(serializers.ModelSerializer):
         allow_blank=False,
         error_messages={'blank': EMPTY_POST_TITLE_ERROR},
     )
+    author = serializers.CharField(
+        source='get_author',
+        read_only=True
+    )
 
     class Meta:
         model = Post
-        fields = ('title','imagen', 'summary', 'published_date',)
+        fields = ('title','imagen', 'summary', 'published_date', 'author')
 
 class BlogsSerializer(serializers.ModelSerializer):
     blog = serializers.CharField(source='get_blog_url')
