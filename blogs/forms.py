@@ -14,7 +14,7 @@ class PostForm(forms.models.ModelForm):
         """Meta."""
 
         model = Post
-        fields = ('title','summary','imagen','description','category','published_date')
+        fields = ('title','summary','imagen','description','published_date')
         widgets = {
             'title': forms.fields.TextInput(attrs={
                 'placeholder': 'Enter a post title',
@@ -37,6 +37,5 @@ class NewPostForm(PostForm):
                                        summary=self.cleaned_data['summary'],
                                        imagen=self.cleaned_data['imagen'],
                                        description=self.cleaned_data['description'],
-                                       category=self.cleaned_data['category'],
                                        published_date=self.cleaned_data['published_date'],
                                        owner=owner)
