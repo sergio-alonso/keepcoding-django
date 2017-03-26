@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils.timezone import now
 
 from blogs.models import Post
@@ -76,10 +76,11 @@ class PostSerializer(serializers.ModelSerializer):
 
 class BlogsSerializer(serializers.ModelSerializer):
     blog = serializers.CharField(source='get_blog_url')
+    posts_count = serializers.ReadOnlyField()
 
     class Meta:
         model = User
-        fields = ('blog',)
+        fields = ('blog', 'posts_count')
 
 class UserSerializer(serializers.ModelSerializer):
     posts = PostSerializer(read_only=True, many=True, source='post_set')
@@ -104,7 +105,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class BlogsViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_value_regex = '[\w.@+-]+'
-    queryset = User.objects.all().order_by('email')
+    queryset = User.objects.annotate(posts_count=Count('post')).all().order_by('email')
     serializer_class = BlogsSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('email',)

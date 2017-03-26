@@ -26,11 +26,11 @@ class BlogAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'blog': '/api/v1/blogs/user.name.0@example.com/'},
-             {'blog': '/api/v1/blogs/user.name.1@example.com/'},
-             {'blog': '/api/v1/blogs/user.name.2@example.com/'},
-             {'blog': '/api/v1/blogs/user.name.3@example.com/'},
-             {'blog': '/api/v1/blogs/user.name.4@example.com/'}]
+            [{'posts_count': 0, 'blog': '/api/v1/blogs/user.name.0@example.com/'},
+             {'posts_count': 0, 'blog': '/api/v1/blogs/user.name.1@example.com/'},
+             {'posts_count': 0, 'blog': '/api/v1/blogs/user.name.2@example.com/'},
+             {'posts_count': 0, 'blog': '/api/v1/blogs/user.name.3@example.com/'},
+             {'posts_count': 0, 'blog': '/api/v1/blogs/user.name.4@example.com/'}]
         )
 
 
@@ -40,7 +40,7 @@ class BlogAPITest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             json.loads(response.content.decode('utf8')),
-            [{'blog': '/api/v1/blogs/user.name.2@example.com/'}]
+            [{'posts_count': 0, 'blog': '/api/v1/blogs/user.name.2@example.com/'}]
         )
 
 
