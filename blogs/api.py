@@ -67,6 +67,7 @@ class PostSerializer(serializers.ModelSerializer):
     )
     author = serializers.CharField(
         source='get_author',
+        read_only=True
     )
 
     class Meta:
