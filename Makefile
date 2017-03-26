@@ -1,20 +1,24 @@
-.PHONY: help run test ut ft db db_clean static seed coverage
+.PHONY: help install start test coverage ut ft db db_clean db_create db_seed static
 
 default: help
 
 help:
 	@echo "help - Show this help"
-	@echo "run - Start development server"
+	@echo "install - Install application"
+	@echo "start - Start development server"
 	@echo "test - Run all tests"
+	@echo "coverage - Code coverage"
 	@echo "ut - Run unit tests"
 	@echo "ft - Run functional tests"
 	@echo "bd - Handle databse"
 	@echo "db_clean - Recreate a fresh database"
+	@echo "db_create - Recreate a fresh database"
+	@echo "db_seed - Populate with dummy data"
 	@echo "static - Handle static files"
-	@echo "seeEd - Populate with dummy data"
-	@echo "coverage - Code coverage"
 
-run:
+install: db coverage
+
+start:
 	screen -S server python manage.py runserver
     # C-a a d
     # screen -rd server
@@ -38,12 +42,12 @@ ft:
 
 db:	db_clean db_create db_seed
 
+db_clean:
+	rm -fr db.sqlite3
+
 db_create:
 	python manage.py makemigrations
 	python manage.py migrate
-
-db_clean:
-	rm -fr db.sqlite3
 
 db_seed:
 	python manage.py seed blogs --number=10
