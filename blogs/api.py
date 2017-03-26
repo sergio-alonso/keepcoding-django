@@ -12,6 +12,7 @@ from django.utils.timezone import now
 
 from blogs.models import Post
 from blogs.forms import EMPTY_POST_TITLE_ERROR, DUPLICATE_POST_TITLE_ERROR
+from blogs.filters import CategoryFilter
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -110,6 +111,7 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter)
     search_fields = ('title', 'summary',)
+    filter_class = CategoryFilter
     ordering = ('title', 'published_date',)
 
     def get_queryset(self):
