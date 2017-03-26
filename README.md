@@ -1,26 +1,12 @@
 KeepCoding Django
 
-# TDD - Test Driven Development
+# Install
 
-http://www.obeythetestinggoat.com
+make install
 
-# Test First - Do Nothing Until You Have a Test
+# Development server
 
-# Take One Step at a Time
-
-# YAGNI - You Ain't Gonna Need It!
-
-# REST API
-
-# Django
-
-# Django REST Framework
-
-# Selenium Browser
-
-# BDD - Behaviour Driven Development
-
-# Development Driven Tests - Using Unit Tests for Exploratory Coding
+make start
 
 # httpie
 
