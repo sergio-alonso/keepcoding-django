@@ -126,7 +126,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../keepcoding-django-static'))
 
 # Upload Media files
-MEDIA_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../keepcoding-django-media'))
+MEDIA_ROOT = '../keepcoding-django-media'
 
 # Email
 
