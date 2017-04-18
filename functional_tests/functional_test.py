@@ -41,7 +41,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     @classmethod
     def setUp(self):
         """Test case setUp."""
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
 
     def tearDown(self):
         """Test case tearDown."""
@@ -50,7 +50,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def restart_browser(self):
         """Restart browser."""
         self.browser.quit()
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
 
     @wait
     def wait_for(self, fn):

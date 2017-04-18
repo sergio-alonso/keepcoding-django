@@ -59,7 +59,7 @@ class NewPostFormTest(unittest.TestCase):
             title='new post title',
             owner=user,
             description='',
-            imagen='',
+            imagen=None,
             published_date=None
         )
 
