@@ -14,10 +14,9 @@ auth.signals.user_logged_in.disconnect(auth.models.update_last_login)
 class UserManager(auth.models.BaseUserManager):
     """User Manager."""
 
-    def create_user(self, email, password=None):
-        return
-        print(email, password)
+    def create_user(self, email, password=None, is_admin=False):
         """Create user."""
+
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -26,10 +25,7 @@ class UserManager(auth.models.BaseUserManager):
             password = password
         )
 
-        # Only example.com emails are admins
-        domain = re.search("@[\w.]+", email)
-        if domain == '@example.com':
-            user.is_admin = True
+        user.is_admin = is_admin
 
         if password == None:
             user.password = 'supersecret'
@@ -39,7 +35,7 @@ class UserManager(auth.models.BaseUserManager):
 
     def create_superuser(self, email, password):
         """Create superuser."""
-        self.create_user(email, password)
+        self.create_user(email, password, is_admin=True)
 
 class User(models.Model):
     """User model."""
