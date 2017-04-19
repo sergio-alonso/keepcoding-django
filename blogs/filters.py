@@ -1,12 +1,13 @@
-import django_filters
+from rest_framework import filters
 
 from blogs.models import Post
 
+class CategoryFilter(filters.BaseFilterBackend):
 
-class CategoryFilter(django_filters.FilterSet):
+    def filter_queryset(self, request, queryset, view):
+        category = request.query_params.get('category', None)
+        if category:
+            category = category.split(',')
+            queryset = queryset.filter(category__name__in=category).distinct()
 
-    category = django_filters.CharFilter(name="category")
-
-    class Meta:
-        model = Post
-        fields = ['category']
+        return queryset

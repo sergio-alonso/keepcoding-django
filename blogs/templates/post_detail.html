@@ -6,15 +6,19 @@
 
 <h2 class="post-title">{{ post.title }}</h2>
 
+<p>Summary:</p>
 <p>{{ post.summary }}</p>
 
+<p>Image:</p>
 <img src="{{ post.imagen }}" />
 
+<p>Description:</p>
 <p>{{ post.description }}</p>
 
-<p>{{ post.category }}</p>
-
-<p>{{ tag.name }}</p>
+<p>Categories:</p>
+{% for tag in post.category.names %}
+<p>{{ tag }}</p>
+{% endfor %}
 
 <p>Published: <time datetime="{{ post.published_date }}">{{ post.published_date }}</time></p>
 

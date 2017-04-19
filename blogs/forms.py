@@ -14,7 +14,7 @@ class PostForm(forms.models.ModelForm):
         """Meta."""
 
         model = Post
-        fields = ('title','summary','imagen','description','published_date')
+        fields = ('title','summary','imagen','description','category','published_date',)
         widgets = {
             'title': forms.fields.TextInput(attrs={
                 'placeholder': 'Enter a post title',
@@ -26,16 +26,13 @@ class PostForm(forms.models.ModelForm):
                       'unique': DUPLICATE_POST_TITLE_ERROR}
         }
 
-
 class NewPostForm(PostForm):
     """New post form."""
 
     def save(self, owner):
         """Save."""
         if owner.is_authenticated:
-            return Post.objects.create(title=self.cleaned_data['title'],
-                                       summary=self.cleaned_data['summary'],
-                                       imagen=self.cleaned_data['imagen'],
-                                       description=self.cleaned_data['description'],
-                                       published_date=self.cleaned_data['published_date'],
-                                       owner=owner)
+            instance = super(NewPostForm, self).save(commit=False)
+            instance.owner = owner
+            instance.save()
+            return instance

@@ -30,8 +30,9 @@ def post_create(request):
 def post_save(request):
     """Post save view."""
     form = NewPostForm(data=request.POST)
-    if form.is_valid():
-        post = form.save(owner=request.user)
+    if form.is_valid() and request.user.is_authenticated:
+        form.save(owner=request.user)
+        form.save_m2m()
         return redirect('blog', user_email=request.user.email)
     return render(request, 'post_create.html', {'form': NewPostForm()})
 

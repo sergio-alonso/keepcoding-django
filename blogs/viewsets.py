@@ -38,9 +38,8 @@ class BlogsViewSet(viewsets.ReadOnlyModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.select_related('owner').all().order_by('-published_date')
     serializer_class = PostSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter)
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter, CategoryFilter)
     search_fields = ('title', 'summary',)
-    filter_class = CategoryFilter
     ordering = ('title', 'published_date',)
 
     def get_queryset(self):

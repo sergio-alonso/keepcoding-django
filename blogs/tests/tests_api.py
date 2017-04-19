@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils.http import urlencode
 from django.utils.timezone import now
 
-from blogs.models import Post, Category
+from blogs.models import Post
 from blogs.forms import EMPTY_POST_TITLE_ERROR, DUPLICATE_POST_TITLE_ERROR
 
 class BlogAPITest(TestCase):
@@ -59,8 +59,7 @@ class PostAPITest(TestCase):
         Post.objects.create(title='Post 2', summary='Post D', owner=self.user)
         Post.objects.create(title='Post 1', summary='Post E', owner=self.user, published_date='2017-01-03T00:00:00.000000Z')
 
-        category1 = Category.objects.create(name='category-1')
-        post1.category.add(category1)
+        post1.category.add("category-1")
 
         self.other_user = User.objects.create(email="bad.user@dummy.com", password='badsecret')
         self.other_header = {'HTTP_AUTHORIZATION': 'Basic {}'.format('YmFkLnVzZXJAZHVtbXkuY29tOmJhZHNlY3JldA==')}

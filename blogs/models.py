@@ -2,13 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.core.urlresolvers import reverse
 
-class Category(models.Model):
-
-    name = models.CharField(max_length=128, primary_key=True)
-
-    def __str__(self):
-        return self.name
-
+from taggit.managers import TaggableManager
 
 class Post(models.Model):
     """Post model."""
@@ -18,7 +12,7 @@ class Post(models.Model):
     summary = models.TextField(default='', null=True, blank=True)
     description = models.TextField(default='', null=True, blank=True)
     imagen = models.URLField(default='', null=True, blank=True)
-    category = models.ManyToManyField(Category)
+    category = TaggableManager(blank=True)
     published_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

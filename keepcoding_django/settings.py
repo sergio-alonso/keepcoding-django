@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_seed',
     'rest_framework',
+    'taggit',
     'blogs',
     'accounts',
     'uploader'
