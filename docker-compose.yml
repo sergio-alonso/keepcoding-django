@@ -1,0 +1,14 @@
+version: "2"
+
+services:
+  backend:
+    restart: on-failure:10
+    build: .
+    command: gunicorn keepcoding_django.wsgi:application --bind :4500 --reload
+    volumes:
+      - .:/code
+    ports:
+      - "4500:4500"
+
+volumes:
+  db-data:
