@@ -6,9 +6,6 @@ services:
     build: .
     command: gunicorn keepcoding_django.wsgi:application --bind :4500 --reload
     volumes:
-      - .:/code
+        - .:/code
     ports:
-      - "4500:4500"
-
-volumes:
-  db-data:
+        - "4500:4500"

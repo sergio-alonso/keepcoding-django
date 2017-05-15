@@ -1,10 +1,11 @@
 FROM python:3.4
+MAINTAINER Sergio Alonso <sergio@sergioalonso.es>
 
-RUN mkdir /code
-WORKDIR /code
+VOLUME ["/code"]
+WORKDIR "/code"
 
-ADD . /code/
-RUN pip install -r requirements.txt
-RUN	python manage.py makemigrations && \
-	python manage.py migrate && \
-	python manage.py seed blogs --number=10
+COPY requirements.txt /code
+
+RUN pip install --requirement requirements.txt
+
+COPY . /code/
