@@ -7,7 +7,7 @@ Django==1.11
 django-filter==1.0.2
 django-seed==0.1.7
 django-taggit==0.22.0
-djangorestframework==3.6.2
+djangorestframework==3.9.1
 Faker==0.7.10
 flake8==3.3.0
 flake8-docstrings==1.0.3
